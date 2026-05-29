@@ -1,0 +1,408 @@
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'restaurant_summary.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
+
+RestaurantSummary _$RestaurantSummaryFromJson(Map<String, dynamic> json) {
+  return _RestaurantSummary.fromJson(json);
+}
+
+/// @nodoc
+mixin _$RestaurantSummary {
+  String get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
+  double get rating => throw _privateConstructorUsedError;
+  int get reviewCount => throw _privateConstructorUsedError;
+  String get cuisineTags => throw _privateConstructorUsedError;
+  int get estimatedDeliveryMinutes => throw _privateConstructorUsedError;
+  double get minimumOrderAmount => throw _privateConstructorUsedError;
+  bool get isOpen => throw _privateConstructorUsedError;
+  bool get hasFreeDelivery => throw _privateConstructorUsedError;
+  bool get isSponsored => throw _privateConstructorUsedError;
+
+  /// Serializes this RestaurantSummary to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of RestaurantSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $RestaurantSummaryCopyWith<RestaurantSummary> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RestaurantSummaryCopyWith<$Res> {
+  factory $RestaurantSummaryCopyWith(
+    RestaurantSummary value,
+    $Res Function(RestaurantSummary) then,
+  ) = _$RestaurantSummaryCopyWithImpl<$Res, RestaurantSummary>;
+  @useResult
+  $Res call({
+    String id,
+    String name,
+    String imageUrl,
+    double rating,
+    int reviewCount,
+    String cuisineTags,
+    int estimatedDeliveryMinutes,
+    double minimumOrderAmount,
+    bool isOpen,
+    bool hasFreeDelivery,
+    bool isSponsored,
+  });
+}
+
+/// @nodoc
+class _$RestaurantSummaryCopyWithImpl<$Res, $Val extends RestaurantSummary>
+    implements $RestaurantSummaryCopyWith<$Res> {
+  _$RestaurantSummaryCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of RestaurantSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = null,
+    Object? imageUrl = null,
+    Object? rating = null,
+    Object? reviewCount = null,
+    Object? cuisineTags = null,
+    Object? estimatedDeliveryMinutes = null,
+    Object? minimumOrderAmount = null,
+    Object? isOpen = null,
+    Object? hasFreeDelivery = null,
+    Object? isSponsored = null,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            imageUrl: null == imageUrl
+                ? _value.imageUrl
+                : imageUrl // ignore: cast_nullable_to_non_nullable
+                      as String,
+            rating: null == rating
+                ? _value.rating
+                : rating // ignore: cast_nullable_to_non_nullable
+                      as double,
+            reviewCount: null == reviewCount
+                ? _value.reviewCount
+                : reviewCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            cuisineTags: null == cuisineTags
+                ? _value.cuisineTags
+                : cuisineTags // ignore: cast_nullable_to_non_nullable
+                      as String,
+            estimatedDeliveryMinutes: null == estimatedDeliveryMinutes
+                ? _value.estimatedDeliveryMinutes
+                : estimatedDeliveryMinutes // ignore: cast_nullable_to_non_nullable
+                      as int,
+            minimumOrderAmount: null == minimumOrderAmount
+                ? _value.minimumOrderAmount
+                : minimumOrderAmount // ignore: cast_nullable_to_non_nullable
+                      as double,
+            isOpen: null == isOpen
+                ? _value.isOpen
+                : isOpen // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            hasFreeDelivery: null == hasFreeDelivery
+                ? _value.hasFreeDelivery
+                : hasFreeDelivery // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            isSponsored: null == isSponsored
+                ? _value.isSponsored
+                : isSponsored // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$RestaurantSummaryImplCopyWith<$Res>
+    implements $RestaurantSummaryCopyWith<$Res> {
+  factory _$$RestaurantSummaryImplCopyWith(
+    _$RestaurantSummaryImpl value,
+    $Res Function(_$RestaurantSummaryImpl) then,
+  ) = __$$RestaurantSummaryImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String id,
+    String name,
+    String imageUrl,
+    double rating,
+    int reviewCount,
+    String cuisineTags,
+    int estimatedDeliveryMinutes,
+    double minimumOrderAmount,
+    bool isOpen,
+    bool hasFreeDelivery,
+    bool isSponsored,
+  });
+}
+
+/// @nodoc
+class __$$RestaurantSummaryImplCopyWithImpl<$Res>
+    extends _$RestaurantSummaryCopyWithImpl<$Res, _$RestaurantSummaryImpl>
+    implements _$$RestaurantSummaryImplCopyWith<$Res> {
+  __$$RestaurantSummaryImplCopyWithImpl(
+    _$RestaurantSummaryImpl _value,
+    $Res Function(_$RestaurantSummaryImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of RestaurantSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = null,
+    Object? imageUrl = null,
+    Object? rating = null,
+    Object? reviewCount = null,
+    Object? cuisineTags = null,
+    Object? estimatedDeliveryMinutes = null,
+    Object? minimumOrderAmount = null,
+    Object? isOpen = null,
+    Object? hasFreeDelivery = null,
+    Object? isSponsored = null,
+  }) {
+    return _then(
+      _$RestaurantSummaryImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        imageUrl: null == imageUrl
+            ? _value.imageUrl
+            : imageUrl // ignore: cast_nullable_to_non_nullable
+                  as String,
+        rating: null == rating
+            ? _value.rating
+            : rating // ignore: cast_nullable_to_non_nullable
+                  as double,
+        reviewCount: null == reviewCount
+            ? _value.reviewCount
+            : reviewCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        cuisineTags: null == cuisineTags
+            ? _value.cuisineTags
+            : cuisineTags // ignore: cast_nullable_to_non_nullable
+                  as String,
+        estimatedDeliveryMinutes: null == estimatedDeliveryMinutes
+            ? _value.estimatedDeliveryMinutes
+            : estimatedDeliveryMinutes // ignore: cast_nullable_to_non_nullable
+                  as int,
+        minimumOrderAmount: null == minimumOrderAmount
+            ? _value.minimumOrderAmount
+            : minimumOrderAmount // ignore: cast_nullable_to_non_nullable
+                  as double,
+        isOpen: null == isOpen
+            ? _value.isOpen
+            : isOpen // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        hasFreeDelivery: null == hasFreeDelivery
+            ? _value.hasFreeDelivery
+            : hasFreeDelivery // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        isSponsored: null == isSponsored
+            ? _value.isSponsored
+            : isSponsored // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$RestaurantSummaryImpl implements _RestaurantSummary {
+  const _$RestaurantSummaryImpl({
+    required this.id,
+    required this.name,
+    required this.imageUrl,
+    required this.rating,
+    required this.reviewCount,
+    required this.cuisineTags,
+    required this.estimatedDeliveryMinutes,
+    required this.minimumOrderAmount,
+    this.isOpen = false,
+    this.hasFreeDelivery = false,
+    this.isSponsored = false,
+  });
+
+  factory _$RestaurantSummaryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$RestaurantSummaryImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String name;
+  @override
+  final String imageUrl;
+  @override
+  final double rating;
+  @override
+  final int reviewCount;
+  @override
+  final String cuisineTags;
+  @override
+  final int estimatedDeliveryMinutes;
+  @override
+  final double minimumOrderAmount;
+  @override
+  @JsonKey()
+  final bool isOpen;
+  @override
+  @JsonKey()
+  final bool hasFreeDelivery;
+  @override
+  @JsonKey()
+  final bool isSponsored;
+
+  @override
+  String toString() {
+    return 'RestaurantSummary(id: $id, name: $name, imageUrl: $imageUrl, rating: $rating, reviewCount: $reviewCount, cuisineTags: $cuisineTags, estimatedDeliveryMinutes: $estimatedDeliveryMinutes, minimumOrderAmount: $minimumOrderAmount, isOpen: $isOpen, hasFreeDelivery: $hasFreeDelivery, isSponsored: $isSponsored)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RestaurantSummaryImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.rating, rating) || other.rating == rating) &&
+            (identical(other.reviewCount, reviewCount) ||
+                other.reviewCount == reviewCount) &&
+            (identical(other.cuisineTags, cuisineTags) ||
+                other.cuisineTags == cuisineTags) &&
+            (identical(
+                  other.estimatedDeliveryMinutes,
+                  estimatedDeliveryMinutes,
+                ) ||
+                other.estimatedDeliveryMinutes == estimatedDeliveryMinutes) &&
+            (identical(other.minimumOrderAmount, minimumOrderAmount) ||
+                other.minimumOrderAmount == minimumOrderAmount) &&
+            (identical(other.isOpen, isOpen) || other.isOpen == isOpen) &&
+            (identical(other.hasFreeDelivery, hasFreeDelivery) ||
+                other.hasFreeDelivery == hasFreeDelivery) &&
+            (identical(other.isSponsored, isSponsored) ||
+                other.isSponsored == isSponsored));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    name,
+    imageUrl,
+    rating,
+    reviewCount,
+    cuisineTags,
+    estimatedDeliveryMinutes,
+    minimumOrderAmount,
+    isOpen,
+    hasFreeDelivery,
+    isSponsored,
+  );
+
+  /// Create a copy of RestaurantSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RestaurantSummaryImplCopyWith<_$RestaurantSummaryImpl> get copyWith =>
+      __$$RestaurantSummaryImplCopyWithImpl<_$RestaurantSummaryImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$RestaurantSummaryImplToJson(this);
+  }
+}
+
+abstract class _RestaurantSummary implements RestaurantSummary {
+  const factory _RestaurantSummary({
+    required final String id,
+    required final String name,
+    required final String imageUrl,
+    required final double rating,
+    required final int reviewCount,
+    required final String cuisineTags,
+    required final int estimatedDeliveryMinutes,
+    required final double minimumOrderAmount,
+    final bool isOpen,
+    final bool hasFreeDelivery,
+    final bool isSponsored,
+  }) = _$RestaurantSummaryImpl;
+
+  factory _RestaurantSummary.fromJson(Map<String, dynamic> json) =
+      _$RestaurantSummaryImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get name;
+  @override
+  String get imageUrl;
+  @override
+  double get rating;
+  @override
+  int get reviewCount;
+  @override
+  String get cuisineTags;
+  @override
+  int get estimatedDeliveryMinutes;
+  @override
+  double get minimumOrderAmount;
+  @override
+  bool get isOpen;
+  @override
+  bool get hasFreeDelivery;
+  @override
+  bool get isSponsored;
+
+  /// Create a copy of RestaurantSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RestaurantSummaryImplCopyWith<_$RestaurantSummaryImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

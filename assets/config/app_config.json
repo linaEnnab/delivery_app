@@ -1,0 +1,11 @@
+{
+  "app_name": "Delivery",
+  "default_locale": "en",
+  "supported_locales": ["en", "ar"],
+  "min_app_version": "1.0.0",
+  "features": {
+    "loyalty_enabled": true,
+    "live_tracking_enabled": true,
+    "reviews_enabled": true
+  }
+}
