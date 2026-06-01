@@ -276,6 +276,7 @@ mixin _$CartItem {
   int get quantity => throw _privateConstructorUsedError;
   Money get unitPrice => throw _privateConstructorUsedError;
   Money get lineTotal => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
   List<SelectedProductOption> get selectedOptions =>
       throw _privateConstructorUsedError;
   String? get specialInstructions => throw _privateConstructorUsedError;
@@ -302,6 +303,7 @@ abstract class $CartItemCopyWith<$Res> {
     int quantity,
     Money unitPrice,
     Money lineTotal,
+    String? imageUrl,
     List<SelectedProductOption> selectedOptions,
     String? specialInstructions,
   });
@@ -331,6 +333,7 @@ class _$CartItemCopyWithImpl<$Res, $Val extends CartItem>
     Object? quantity = null,
     Object? unitPrice = null,
     Object? lineTotal = null,
+    Object? imageUrl = freezed,
     Object? selectedOptions = null,
     Object? specialInstructions = freezed,
   }) {
@@ -360,6 +363,10 @@ class _$CartItemCopyWithImpl<$Res, $Val extends CartItem>
                 ? _value.lineTotal
                 : lineTotal // ignore: cast_nullable_to_non_nullable
                       as Money,
+            imageUrl: freezed == imageUrl
+                ? _value.imageUrl
+                : imageUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
             selectedOptions: null == selectedOptions
                 ? _value.selectedOptions
                 : selectedOptions // ignore: cast_nullable_to_non_nullable
@@ -410,6 +417,7 @@ abstract class _$$CartItemImplCopyWith<$Res>
     int quantity,
     Money unitPrice,
     Money lineTotal,
+    String? imageUrl,
     List<SelectedProductOption> selectedOptions,
     String? specialInstructions,
   });
@@ -440,6 +448,7 @@ class __$$CartItemImplCopyWithImpl<$Res>
     Object? quantity = null,
     Object? unitPrice = null,
     Object? lineTotal = null,
+    Object? imageUrl = freezed,
     Object? selectedOptions = null,
     Object? specialInstructions = freezed,
   }) {
@@ -469,6 +478,10 @@ class __$$CartItemImplCopyWithImpl<$Res>
             ? _value.lineTotal
             : lineTotal // ignore: cast_nullable_to_non_nullable
                   as Money,
+        imageUrl: freezed == imageUrl
+            ? _value.imageUrl
+            : imageUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
         selectedOptions: null == selectedOptions
             ? _value._selectedOptions
             : selectedOptions // ignore: cast_nullable_to_non_nullable
@@ -492,6 +505,7 @@ class _$CartItemImpl implements _CartItem {
     required this.quantity,
     required this.unitPrice,
     required this.lineTotal,
+    this.imageUrl,
     final List<SelectedProductOption> selectedOptions = const [],
     this.specialInstructions,
   }) : _selectedOptions = selectedOptions;
@@ -511,6 +525,8 @@ class _$CartItemImpl implements _CartItem {
   final Money unitPrice;
   @override
   final Money lineTotal;
+  @override
+  final String? imageUrl;
   final List<SelectedProductOption> _selectedOptions;
   @override
   @JsonKey()
@@ -525,7 +541,7 @@ class _$CartItemImpl implements _CartItem {
 
   @override
   String toString() {
-    return 'CartItem(id: $id, productId: $productId, productName: $productName, quantity: $quantity, unitPrice: $unitPrice, lineTotal: $lineTotal, selectedOptions: $selectedOptions, specialInstructions: $specialInstructions)';
+    return 'CartItem(id: $id, productId: $productId, productName: $productName, quantity: $quantity, unitPrice: $unitPrice, lineTotal: $lineTotal, imageUrl: $imageUrl, selectedOptions: $selectedOptions, specialInstructions: $specialInstructions)';
   }
 
   @override
@@ -544,6 +560,8 @@ class _$CartItemImpl implements _CartItem {
                 other.unitPrice == unitPrice) &&
             (identical(other.lineTotal, lineTotal) ||
                 other.lineTotal == lineTotal) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             const DeepCollectionEquality().equals(
               other._selectedOptions,
               _selectedOptions,
@@ -562,6 +580,7 @@ class _$CartItemImpl implements _CartItem {
     quantity,
     unitPrice,
     lineTotal,
+    imageUrl,
     const DeepCollectionEquality().hash(_selectedOptions),
     specialInstructions,
   );
@@ -588,6 +607,7 @@ abstract class _CartItem implements CartItem {
     required final int quantity,
     required final Money unitPrice,
     required final Money lineTotal,
+    final String? imageUrl,
     final List<SelectedProductOption> selectedOptions,
     final String? specialInstructions,
   }) = _$CartItemImpl;
@@ -607,6 +627,8 @@ abstract class _CartItem implements CartItem {
   Money get unitPrice;
   @override
   Money get lineTotal;
+  @override
+  String? get imageUrl;
   @override
   List<SelectedProductOption> get selectedOptions;
   @override

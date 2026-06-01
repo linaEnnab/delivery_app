@@ -27,7 +27,7 @@ mixin _$Order {
   OrderStatus get status => throw _privateConstructorUsedError;
   List<CartItem> get items => throw _privateConstructorUsedError;
   OrderPricing get pricing => throw _privateConstructorUsedError;
-  Address get deliveryAddress => throw _privateConstructorUsedError;
+  DeliveryAddress get deliveryAddress => throw _privateConstructorUsedError;
   PaymentMethod get paymentMethod => throw _privateConstructorUsedError;
   CustomerDeliveryContact? get customerContact =>
       throw _privateConstructorUsedError;
@@ -60,7 +60,7 @@ abstract class $OrderCopyWith<$Res> {
     OrderStatus status,
     List<CartItem> items,
     OrderPricing pricing,
-    Address deliveryAddress,
+    DeliveryAddress deliveryAddress,
     PaymentMethod paymentMethod,
     CustomerDeliveryContact? customerContact,
     DriverSummary? driver,
@@ -72,7 +72,7 @@ abstract class $OrderCopyWith<$Res> {
 
   $OrderRestaurantDetailsCopyWith<$Res> get restaurant;
   $OrderPricingCopyWith<$Res> get pricing;
-  $AddressCopyWith<$Res> get deliveryAddress;
+  $DeliveryAddressCopyWith<$Res> get deliveryAddress;
   $CustomerDeliveryContactCopyWith<$Res>? get customerContact;
   $DriverSummaryCopyWith<$Res>? get driver;
 }
@@ -136,7 +136,7 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
             deliveryAddress: null == deliveryAddress
                 ? _value.deliveryAddress
                 : deliveryAddress // ignore: cast_nullable_to_non_nullable
-                      as Address,
+                      as DeliveryAddress,
             paymentMethod: null == paymentMethod
                 ? _value.paymentMethod
                 : paymentMethod // ignore: cast_nullable_to_non_nullable
@@ -194,8 +194,8 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AddressCopyWith<$Res> get deliveryAddress {
-    return $AddressCopyWith<$Res>(_value.deliveryAddress, (value) {
+  $DeliveryAddressCopyWith<$Res> get deliveryAddress {
+    return $DeliveryAddressCopyWith<$Res>(_value.deliveryAddress, (value) {
       return _then(_value.copyWith(deliveryAddress: value) as $Val);
     });
   }
@@ -246,7 +246,7 @@ abstract class _$$OrderImplCopyWith<$Res> implements $OrderCopyWith<$Res> {
     OrderStatus status,
     List<CartItem> items,
     OrderPricing pricing,
-    Address deliveryAddress,
+    DeliveryAddress deliveryAddress,
     PaymentMethod paymentMethod,
     CustomerDeliveryContact? customerContact,
     DriverSummary? driver,
@@ -261,7 +261,7 @@ abstract class _$$OrderImplCopyWith<$Res> implements $OrderCopyWith<$Res> {
   @override
   $OrderPricingCopyWith<$Res> get pricing;
   @override
-  $AddressCopyWith<$Res> get deliveryAddress;
+  $DeliveryAddressCopyWith<$Res> get deliveryAddress;
   @override
   $CustomerDeliveryContactCopyWith<$Res>? get customerContact;
   @override
@@ -326,7 +326,7 @@ class __$$OrderImplCopyWithImpl<$Res>
         deliveryAddress: null == deliveryAddress
             ? _value.deliveryAddress
             : deliveryAddress // ignore: cast_nullable_to_non_nullable
-                  as Address,
+                  as DeliveryAddress,
         paymentMethod: null == paymentMethod
             ? _value.paymentMethod
             : paymentMethod // ignore: cast_nullable_to_non_nullable
@@ -403,7 +403,7 @@ class _$OrderImpl extends _Order {
   @override
   final OrderPricing pricing;
   @override
-  final Address deliveryAddress;
+  final DeliveryAddress deliveryAddress;
   @override
   final PaymentMethod paymentMethod;
   @override
@@ -500,7 +500,7 @@ abstract class _Order extends Order {
     required final OrderStatus status,
     required final List<CartItem> items,
     required final OrderPricing pricing,
-    required final Address deliveryAddress,
+    required final DeliveryAddress deliveryAddress,
     required final PaymentMethod paymentMethod,
     final CustomerDeliveryContact? customerContact,
     final DriverSummary? driver,
@@ -526,7 +526,7 @@ abstract class _Order extends Order {
   @override
   OrderPricing get pricing;
   @override
-  Address get deliveryAddress;
+  DeliveryAddress get deliveryAddress;
   @override
   PaymentMethod get paymentMethod;
   @override

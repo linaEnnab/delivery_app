@@ -31,6 +31,7 @@ lib/
 │   ├── errors/               # Exceptions & Failures
 │   ├── network/              # Dio, interceptors, endpoints
 │   ├── router/               # GoRouter paths & config
+│   ├── startup/              # Onboarding flag + post-splash destination providers
 │   ├── theme/                # Material 3 light/dark
 │   ├── responsive/           # Breakpoints & layout helpers
 │   ├── storage/              # Secure token storage
@@ -54,11 +55,11 @@ lib/
             └── providers/
 ```
 
-## Features (21)
+## Features (22)
 
 | Feature | Responsibility |
 |---------|----------------|
-| `auth` | Login, register, session, token refresh |
+| `auth` | Login, register, forgot password; session from secure token storage + GoRouter guards; API wiring pending |
 | `home` | Feed, banners, promotions |
 | `restaurant` | Listing & restaurant details |
 | `product` | Product details & options |
@@ -79,6 +80,7 @@ lib/
 | `coupons` | Saved customer coupons & validate at checkout |
 | `wallet` | Stored-value wallet balance & ledger |
 | `media_upload` | Presigned upload requests & completion |
+| `location` | Browsing GPS snapshot vs delivery address contracts (no UI in this module) |
 
 ## Stack
 
@@ -92,6 +94,13 @@ lib/
 | Env | `flutter_dotenv` |
 | Storage | `flutter_secure_storage`, `shared_preferences` |
 
+## App startup & navigation guards
+
+- `bootstrap.dart` loads saved theme, hydrates onboarding completion from `SharedPreferences`, and restores the auth session from the access token in secure storage before `runApp`.
+- `SplashPage` waits for the splash duration, reads `postSplashDestinationProvider`, then `context.go` to onboarding (first install), login (onboarding done, signed out), or home (signed in).
+- `GoRouter.redirect` in `app_router.dart` enforces authenticated access to `/home`, keeps unauthenticated users off `/home`, sends users who finished onboarding away from `/onboarding`, and prevents opening login/register/forgot-password until onboarding is complete.
+- `goRouterRefreshProvider` connects Riverpod auth and onboarding notifiers to `GoRouter.refreshListenable` so redirects re-run when sign-in or onboarding state changes (for example after a successful login) without recreating the router from a parent `watch`.
+
 ## Business Rules (foundation)
 
 - **Reviews**: Only when `OrderStatus.delivered` and not already submitted (`SubmitOrderReviewUseCase`).
@@ -103,6 +112,7 @@ lib/
 
 - Field-level JSON mapping for the future ASP.NET Core API: [docs/API_CONTRACTS.md](API_CONTRACTS.md).
 - Aggregate planning and SQL sketch: [docs/DOMAIN_MODELS.md](DOMAIN_MODELS.md).
+- Location split (browsing vs checkout) and repository contracts: [docs/LOCATION_ARCHITECTURE.md](LOCATION_ARCHITECTURE.md).
 
 | Enum | Location |
 |------|----------|
@@ -116,6 +126,7 @@ lib/
 | `PromotionScope` | `lib/shared/domain/enums/promotion_scope.dart` |
 | `PaymentSessionStatus` | `lib/shared/domain/enums/payment_session_status.dart` |
 | `MediaUploadPurpose` | `lib/shared/domain/enums/media_upload_purpose.dart` |
+| `LocationFixSource` | `lib/shared/domain/enums/location_fix_source.dart` |
 
 ## Code Generation
 

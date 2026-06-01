@@ -4,7 +4,146 @@ import 'package:delivery_app/core/theme/app_spacing.dart';
 import 'package:delivery_app/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 
-/// Material 3 theme configuration: light/dark, RTL-friendly, Arabic-first typography.
+/// Semantic colors outside [ColorScheme] — success, warning, info surfaces.
+///
+/// Access: `Theme.of(context).extension<MarketplaceSemantics>()!`
+@immutable
+class MarketplaceSemantics extends ThemeExtension<MarketplaceSemantics> {
+  const MarketplaceSemantics({
+    required this.success,
+    required this.onSuccess,
+    required this.successContainer,
+    required this.onSuccessContainer,
+    required this.warning,
+    required this.onWarning,
+    required this.warningContainer,
+    required this.onWarningContainer,
+    required this.info,
+    required this.onInfo,
+    required this.infoContainer,
+    required this.onInfoContainer,
+    required this.ratingStar,
+    required this.loyaltyAccent,
+    required this.discountBadge,
+    required this.freeDeliveryBadge,
+    required this.promoBanner,
+  });
+
+  factory MarketplaceSemantics.fromBrightness(Brightness brightness) {
+    return MarketplaceSemantics(
+      success: AppColors.success,
+      onSuccess: AppColors.onSuccess,
+      successContainer: AppColors.successContainerFor(brightness),
+      onSuccessContainer: AppColors.onSuccessContainerFor(brightness),
+      warning: AppColors.warning,
+      onWarning: AppColors.onWarning,
+      warningContainer: AppColors.warningContainerFor(brightness),
+      onWarningContainer: AppColors.onWarningContainerFor(brightness),
+      info: AppColors.info,
+      onInfo: AppColors.onInfo,
+      infoContainer: AppColors.infoContainerFor(brightness),
+      onInfoContainer: AppColors.onInfoContainerFor(brightness),
+      ratingStar: AppColors.ratingStar,
+      loyaltyAccent: AppColors.loyaltyAccent,
+      discountBadge: AppColors.discountBadge,
+      freeDeliveryBadge: AppColors.freeDeliveryBadge,
+      promoBanner: AppColors.promoBanner,
+    );
+  }
+
+  final Color success;
+  final Color onSuccess;
+  final Color successContainer;
+  final Color onSuccessContainer;
+  final Color warning;
+  final Color onWarning;
+  final Color warningContainer;
+  final Color onWarningContainer;
+  final Color info;
+  final Color onInfo;
+  final Color infoContainer;
+  final Color onInfoContainer;
+  final Color ratingStar;
+  final Color loyaltyAccent;
+  final Color discountBadge;
+  final Color freeDeliveryBadge;
+  final Color promoBanner;
+
+  @override
+  MarketplaceSemantics copyWith({
+    Color? success,
+    Color? onSuccess,
+    Color? successContainer,
+    Color? onSuccessContainer,
+    Color? warning,
+    Color? onWarning,
+    Color? warningContainer,
+    Color? onWarningContainer,
+    Color? info,
+    Color? onInfo,
+    Color? infoContainer,
+    Color? onInfoContainer,
+    Color? ratingStar,
+    Color? loyaltyAccent,
+    Color? discountBadge,
+    Color? freeDeliveryBadge,
+    Color? promoBanner,
+  }) {
+    return MarketplaceSemantics(
+      success: success ?? this.success,
+      onSuccess: onSuccess ?? this.onSuccess,
+      successContainer: successContainer ?? this.successContainer,
+      onSuccessContainer: onSuccessContainer ?? this.onSuccessContainer,
+      warning: warning ?? this.warning,
+      onWarning: onWarning ?? this.onWarning,
+      warningContainer: warningContainer ?? this.warningContainer,
+      onWarningContainer: onWarningContainer ?? this.onWarningContainer,
+      info: info ?? this.info,
+      onInfo: onInfo ?? this.onInfo,
+      infoContainer: infoContainer ?? this.infoContainer,
+      onInfoContainer: onInfoContainer ?? this.onInfoContainer,
+      ratingStar: ratingStar ?? this.ratingStar,
+      loyaltyAccent: loyaltyAccent ?? this.loyaltyAccent,
+      discountBadge: discountBadge ?? this.discountBadge,
+      freeDeliveryBadge: freeDeliveryBadge ?? this.freeDeliveryBadge,
+      promoBanner: promoBanner ?? this.promoBanner,
+    );
+  }
+
+  @override
+  ThemeExtension<MarketplaceSemantics> lerp(
+    ThemeExtension<MarketplaceSemantics>? other,
+    double t,
+  ) {
+    if (other is! MarketplaceSemantics) return this;
+    Color lc(Color a, Color b) => Color.lerp(a, b, t)!;
+    return MarketplaceSemantics(
+      success: lc(success, other.success),
+      onSuccess: lc(onSuccess, other.onSuccess),
+      successContainer: lc(successContainer, other.successContainer),
+      onSuccessContainer: lc(onSuccessContainer, other.onSuccessContainer),
+      warning: lc(warning, other.warning),
+      onWarning: lc(onWarning, other.onWarning),
+      warningContainer: lc(warningContainer, other.warningContainer),
+      onWarningContainer: lc(onWarningContainer, other.onWarningContainer),
+      info: lc(info, other.info),
+      onInfo: lc(onInfo, other.onInfo),
+      infoContainer: lc(infoContainer, other.infoContainer),
+      onInfoContainer: lc(onInfoContainer, other.onInfoContainer),
+      ratingStar: lc(ratingStar, other.ratingStar),
+      loyaltyAccent: lc(loyaltyAccent, other.loyaltyAccent),
+      discountBadge: lc(discountBadge, other.discountBadge),
+      freeDeliveryBadge: lc(freeDeliveryBadge, other.freeDeliveryBadge),
+      promoBanner: lc(promoBanner, other.promoBanner),
+    );
+  }
+}
+
+/// **Material 3** theme: light / dark, RTL-friendly, Arabic-first typography
+/// (Cairo + Inter fallback). Use with `MaterialApp` `theme` / `darkTheme`.
+///
+/// Set `locale: Locale('ar')` and `supportedLocales` for Arabic-primary UX;
+/// `Directionality` should follow app locale / device (RTL for Arabic).
 abstract final class AppTheme {
   static ThemeData light() => _build(Brightness.light);
 
@@ -103,6 +242,9 @@ abstract final class AppTheme {
       scaffoldBackgroundColor:
           isLight ? AppColors.lightBackground : AppColors.darkBackground,
       visualDensity: VisualDensity.standard,
+      extensions: <ThemeExtension<dynamic>>[
+        MarketplaceSemantics.fromBrightness(brightness),
+      ],
     );
 
     return base.copyWith(
@@ -119,7 +261,7 @@ abstract final class AppTheme {
       cardTheme: CardThemeData(
         elevation: 0,
         margin: EdgeInsets.zero,
-        shape: AppRadius.shapeLg(),
+        shape: AppRadius.shapeCard(),
         color: colorScheme.surfaceContainerLow,
         clipBehavior: Clip.antiAlias,
       ),
@@ -151,7 +293,7 @@ abstract final class AppTheme {
             typography.bodyMedium?.copyWith(color: colorScheme.onInverseSurface),
       ),
       chipTheme: ChipThemeData(
-        padding: const EdgeInsets.symmetric(
+        padding: const EdgeInsetsDirectional.symmetric(
           horizontal: AppSpacing.md,
           vertical: AppSpacing.xs,
         ),
@@ -165,54 +307,54 @@ abstract final class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        contentPadding: const EdgeInsets.symmetric(
+        contentPadding: const EdgeInsetsDirectional.symmetric(
           horizontal: AppSpacing.lg,
           vertical: AppSpacing.md,
         ),
         fillColor: colorScheme.surfaceContainerHighest,
-        border: OutlineInputBorder(borderRadius: AppRadius.borderMd),
+        border: OutlineInputBorder(borderRadius: AppRadius.borderInput),
         enabledBorder: OutlineInputBorder(
-          borderRadius: AppRadius.borderMd,
+          borderRadius: AppRadius.borderInput,
           borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.35)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: AppRadius.borderMd,
+          borderRadius: AppRadius.borderInput,
           borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: AppRadius.borderMd,
+          borderRadius: AppRadius.borderInput,
           borderSide: BorderSide(color: colorScheme.error),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
+          padding: const EdgeInsetsDirectional.symmetric(
             horizontal: AppSpacing.xxl,
             vertical: AppSpacing.md,
           ),
           minimumSize: const Size(0, AppSpacing.minTapTarget),
-          shape: RoundedRectangleBorder(borderRadius: AppRadius.borderMd),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.borderButton),
           elevation: 0,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
+          padding: const EdgeInsetsDirectional.symmetric(
             horizontal: AppSpacing.xxl,
             vertical: AppSpacing.md,
           ),
           minimumSize: const Size(0, AppSpacing.minTapTarget),
-          shape: RoundedRectangleBorder(borderRadius: AppRadius.borderMd),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.borderButton),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
+          padding: const EdgeInsetsDirectional.symmetric(
             horizontal: AppSpacing.md,
             vertical: AppSpacing.sm,
           ),
           minimumSize: const Size(AppSpacing.minTapTarget, AppSpacing.minTapTarget),
-          shape: RoundedRectangleBorder(borderRadius: AppRadius.borderMd),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.borderButton),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -281,5 +423,14 @@ abstract final class AppTheme {
         }),
       ),
     );
+  }
+}
+
+/// Convenient access to [MarketplaceSemantics] from [BuildContext].
+extension MarketplaceSemanticsContext on BuildContext {
+  MarketplaceSemantics get marketplaceSemantics {
+    final ext = Theme.of(this).extension<MarketplaceSemantics>();
+    assert(ext != null, 'MarketplaceSemantics missing — use AppTheme.light/dark()');
+    return ext!;
   }
 }

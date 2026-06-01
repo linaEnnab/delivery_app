@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// 4px grid spacing tokens. Use for padding, gaps, and insets.
+/// **4px grid** — mobile-first spacing. Use [EdgeInsetsDirectional] in layouts
+/// for RTL correctness; these values are direction-agnostic magnitudes.
 abstract final class AppSpacing {
   static const double xxs = 2;
   static const double xs = 4;
@@ -12,29 +13,49 @@ abstract final class AppSpacing {
   static const double xxxl = 32;
   static const double huge = 40;
   static const double massive = 48;
+  static const double colossal = 56;
+  static const double giant = 64;
 
-  /// Standard horizontal padding for scrollable page content.
-  static const EdgeInsets pagePaddingHorizontal = EdgeInsets.symmetric(
-    horizontal: lg,
-  );
+  /// Standard horizontal padding for scrollable page content (RTL-aware).
+  static const EdgeInsetsDirectional pagePaddingHorizontal =
+      EdgeInsetsDirectional.symmetric(horizontal: lg);
 
-  /// Comfortable page padding (e.g. home sections).
-  static const EdgeInsets pagePadding = EdgeInsets.symmetric(
+  /// Comfortable page padding (sections on home, lists).
+  static const EdgeInsetsDirectional pagePadding = EdgeInsetsDirectional.symmetric(
     horizontal: lg,
     vertical: md,
   );
 
   /// Dense lists (restaurant rows, order lines).
-  static const EdgeInsets listTilePadding = EdgeInsets.symmetric(
-    horizontal: lg,
-    vertical: sm,
-  );
+  static const EdgeInsetsDirectional listTilePadding =
+      EdgeInsetsDirectional.symmetric(horizontal: lg, vertical: sm);
 
-  /// Minimum tap target (accessibility) — use when wrapping compact controls.
+  /// Minimum tap target (WCAG / Material touch).
   static const double minTapTarget = 48;
+
+  /// Responsive horizontal gutter: tighter on phones, roomier on tablets.
+  static double pageHorizontalGutter(double width) {
+    if (width >= AppBreakpoints.expanded) return xxl;
+    if (width >= AppBreakpoints.medium) return xl;
+    return lg;
+  }
+
+  /// Responsive section vertical gap between stacked blocks.
+  static double sectionGap(double width) {
+    if (width >= AppBreakpoints.expanded) return xxxl;
+    if (width >= AppBreakpoints.medium) return xxl;
+    return xl;
+  }
+
+  /// Max readable content width for large windows (marketplace feeds).
+  static double contentMaxWidth(double width) {
+    if (width >= AppBreakpoints.large) return 1200;
+    if (width >= AppBreakpoints.expanded) return 900;
+    return width;
+  }
 }
 
-/// Width breakpoints for responsive layout (token-only; no layout widgets).
+/// Width breakpoints — **mobile first** (`compact` is default).
 abstract final class AppBreakpoints {
   /// Handset portrait.
   static const double compact = 0;

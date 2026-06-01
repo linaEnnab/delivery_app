@@ -20,7 +20,7 @@ Terminal: `cancelled`. Refunds are modeled via payments/wallet, not as `OrderSta
 
 ### Discovery
 
-- `RestaurantSummary` — listing card
+- `RestaurantSummary` — listing card (delivery fee, optional ETA range `estimatedDeliveryMinutesMax` for UI copy like «25–40 د»)
 - `Product` + `ProductOptionGroup` — menu item with modifiers
 - `Category` — API-driven browse
 
@@ -31,7 +31,7 @@ Terminal: `cancelled`. Refunds are modeled via payments/wallet, not as `OrderSta
   - `OrderRestaurantDetails` (id, name, phone, address, coordinates)
   - `CustomerDeliveryContact?` (recipient name/phone)
   - `DriverSummary?` (id, name, phone, rating, `DriverVehicleType`)
-  - `Address deliveryAddress` (line1, city, apartment, floor, instructions, `GeoLocation`)
+  - `DeliveryAddress deliveryAddress` (line1, city, apartment, floor, delivery notes, `GeoLocation` pin; distinct from browsing `UserCurrentLocation`)
   - `loyaltyPointsEarned` snapshot when settled
 - `OrderStatus` — marketplace lifecycle enum
 - `OrderPricing` — checkout and persisted snapshot; getters alias finance vocabulary (`finalTotal`, `driverEarnings`, …)
@@ -90,6 +90,7 @@ Terminal: `cancelled`. Refunds are modeled via payments/wallet, not as `OrderSta
 | `PromotionScope` | `shared/domain/enums/promotion_scope.dart` |
 | `PaymentSessionStatus` | `shared/domain/enums/payment_session_status.dart` |
 | `MediaUploadPurpose` | `shared/domain/enums/media_upload_purpose.dart` |
+| `LocationFixSource` | `shared/domain/enums/location_fix_source.dart` |
 
 ## Suggested SQL tables (future backend)
 
@@ -105,7 +106,13 @@ Terminal: `cancelled`. Refunds are modeled via payments/wallet, not as `OrderSta
 - `Drivers` (referenced from assignments / tracking)
 - `Notifications`
 
+## Location (two concepts)
+
+- `UserCurrentLocation` — GPS browsing snapshot; city/area for discovery; local-only (see [LOCATION_ARCHITECTURE.md](./LOCATION_ARCHITECTURE.md))
+- `DeliveryAddress` — checkout map pin + building/apartment/floor/notes; order snapshot
+
 ## Value objects
 
 - `Money` — amount + `currencyCode` (default AED)
 - `GeoLocation` — lat/lng
+- `RouteEstimate` — distance + travel duration (maps / routing provider)

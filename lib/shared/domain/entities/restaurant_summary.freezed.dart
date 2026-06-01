@@ -28,7 +28,11 @@ mixin _$RestaurantSummary {
   int get reviewCount => throw _privateConstructorUsedError;
   String get cuisineTags => throw _privateConstructorUsedError;
   int get estimatedDeliveryMinutes => throw _privateConstructorUsedError;
+  @JsonKey(name: 'estimated_delivery_minutes_max')
+  int? get estimatedDeliveryMinutesMax => throw _privateConstructorUsedError;
   double get minimumOrderAmount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'delivery_fee_amount')
+  double get deliveryFeeAmount => throw _privateConstructorUsedError;
   bool get isOpen => throw _privateConstructorUsedError;
   bool get hasFreeDelivery => throw _privateConstructorUsedError;
   bool get isSponsored => throw _privateConstructorUsedError;
@@ -58,7 +62,10 @@ abstract class $RestaurantSummaryCopyWith<$Res> {
     int reviewCount,
     String cuisineTags,
     int estimatedDeliveryMinutes,
+    @JsonKey(name: 'estimated_delivery_minutes_max')
+    int? estimatedDeliveryMinutesMax,
     double minimumOrderAmount,
+    @JsonKey(name: 'delivery_fee_amount') double deliveryFeeAmount,
     bool isOpen,
     bool hasFreeDelivery,
     bool isSponsored,
@@ -87,7 +94,9 @@ class _$RestaurantSummaryCopyWithImpl<$Res, $Val extends RestaurantSummary>
     Object? reviewCount = null,
     Object? cuisineTags = null,
     Object? estimatedDeliveryMinutes = null,
+    Object? estimatedDeliveryMinutesMax = freezed,
     Object? minimumOrderAmount = null,
+    Object? deliveryFeeAmount = null,
     Object? isOpen = null,
     Object? hasFreeDelivery = null,
     Object? isSponsored = null,
@@ -122,9 +131,17 @@ class _$RestaurantSummaryCopyWithImpl<$Res, $Val extends RestaurantSummary>
                 ? _value.estimatedDeliveryMinutes
                 : estimatedDeliveryMinutes // ignore: cast_nullable_to_non_nullable
                       as int,
+            estimatedDeliveryMinutesMax: freezed == estimatedDeliveryMinutesMax
+                ? _value.estimatedDeliveryMinutesMax
+                : estimatedDeliveryMinutesMax // ignore: cast_nullable_to_non_nullable
+                      as int?,
             minimumOrderAmount: null == minimumOrderAmount
                 ? _value.minimumOrderAmount
                 : minimumOrderAmount // ignore: cast_nullable_to_non_nullable
+                      as double,
+            deliveryFeeAmount: null == deliveryFeeAmount
+                ? _value.deliveryFeeAmount
+                : deliveryFeeAmount // ignore: cast_nullable_to_non_nullable
                       as double,
             isOpen: null == isOpen
                 ? _value.isOpen
@@ -161,7 +178,10 @@ abstract class _$$RestaurantSummaryImplCopyWith<$Res>
     int reviewCount,
     String cuisineTags,
     int estimatedDeliveryMinutes,
+    @JsonKey(name: 'estimated_delivery_minutes_max')
+    int? estimatedDeliveryMinutesMax,
     double minimumOrderAmount,
+    @JsonKey(name: 'delivery_fee_amount') double deliveryFeeAmount,
     bool isOpen,
     bool hasFreeDelivery,
     bool isSponsored,
@@ -189,7 +209,9 @@ class __$$RestaurantSummaryImplCopyWithImpl<$Res>
     Object? reviewCount = null,
     Object? cuisineTags = null,
     Object? estimatedDeliveryMinutes = null,
+    Object? estimatedDeliveryMinutesMax = freezed,
     Object? minimumOrderAmount = null,
+    Object? deliveryFeeAmount = null,
     Object? isOpen = null,
     Object? hasFreeDelivery = null,
     Object? isSponsored = null,
@@ -224,9 +246,17 @@ class __$$RestaurantSummaryImplCopyWithImpl<$Res>
             ? _value.estimatedDeliveryMinutes
             : estimatedDeliveryMinutes // ignore: cast_nullable_to_non_nullable
                   as int,
+        estimatedDeliveryMinutesMax: freezed == estimatedDeliveryMinutesMax
+            ? _value.estimatedDeliveryMinutesMax
+            : estimatedDeliveryMinutesMax // ignore: cast_nullable_to_non_nullable
+                  as int?,
         minimumOrderAmount: null == minimumOrderAmount
             ? _value.minimumOrderAmount
             : minimumOrderAmount // ignore: cast_nullable_to_non_nullable
+                  as double,
+        deliveryFeeAmount: null == deliveryFeeAmount
+            ? _value.deliveryFeeAmount
+            : deliveryFeeAmount // ignore: cast_nullable_to_non_nullable
                   as double,
         isOpen: null == isOpen
             ? _value.isOpen
@@ -256,7 +286,10 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
     required this.reviewCount,
     required this.cuisineTags,
     required this.estimatedDeliveryMinutes,
+    @JsonKey(name: 'estimated_delivery_minutes_max')
+    this.estimatedDeliveryMinutesMax,
     required this.minimumOrderAmount,
+    @JsonKey(name: 'delivery_fee_amount') this.deliveryFeeAmount = 0,
     this.isOpen = false,
     this.hasFreeDelivery = false,
     this.isSponsored = false,
@@ -280,7 +313,13 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
   @override
   final int estimatedDeliveryMinutes;
   @override
+  @JsonKey(name: 'estimated_delivery_minutes_max')
+  final int? estimatedDeliveryMinutesMax;
+  @override
   final double minimumOrderAmount;
+  @override
+  @JsonKey(name: 'delivery_fee_amount')
+  final double deliveryFeeAmount;
   @override
   @JsonKey()
   final bool isOpen;
@@ -293,7 +332,7 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
 
   @override
   String toString() {
-    return 'RestaurantSummary(id: $id, name: $name, imageUrl: $imageUrl, rating: $rating, reviewCount: $reviewCount, cuisineTags: $cuisineTags, estimatedDeliveryMinutes: $estimatedDeliveryMinutes, minimumOrderAmount: $minimumOrderAmount, isOpen: $isOpen, hasFreeDelivery: $hasFreeDelivery, isSponsored: $isSponsored)';
+    return 'RestaurantSummary(id: $id, name: $name, imageUrl: $imageUrl, rating: $rating, reviewCount: $reviewCount, cuisineTags: $cuisineTags, estimatedDeliveryMinutes: $estimatedDeliveryMinutes, estimatedDeliveryMinutesMax: $estimatedDeliveryMinutesMax, minimumOrderAmount: $minimumOrderAmount, deliveryFeeAmount: $deliveryFeeAmount, isOpen: $isOpen, hasFreeDelivery: $hasFreeDelivery, isSponsored: $isSponsored)';
   }
 
   @override
@@ -315,8 +354,16 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
                   estimatedDeliveryMinutes,
                 ) ||
                 other.estimatedDeliveryMinutes == estimatedDeliveryMinutes) &&
+            (identical(
+                  other.estimatedDeliveryMinutesMax,
+                  estimatedDeliveryMinutesMax,
+                ) ||
+                other.estimatedDeliveryMinutesMax ==
+                    estimatedDeliveryMinutesMax) &&
             (identical(other.minimumOrderAmount, minimumOrderAmount) ||
                 other.minimumOrderAmount == minimumOrderAmount) &&
+            (identical(other.deliveryFeeAmount, deliveryFeeAmount) ||
+                other.deliveryFeeAmount == deliveryFeeAmount) &&
             (identical(other.isOpen, isOpen) || other.isOpen == isOpen) &&
             (identical(other.hasFreeDelivery, hasFreeDelivery) ||
                 other.hasFreeDelivery == hasFreeDelivery) &&
@@ -335,7 +382,9 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
     reviewCount,
     cuisineTags,
     estimatedDeliveryMinutes,
+    estimatedDeliveryMinutesMax,
     minimumOrderAmount,
+    deliveryFeeAmount,
     isOpen,
     hasFreeDelivery,
     isSponsored,
@@ -367,7 +416,10 @@ abstract class _RestaurantSummary implements RestaurantSummary {
     required final int reviewCount,
     required final String cuisineTags,
     required final int estimatedDeliveryMinutes,
+    @JsonKey(name: 'estimated_delivery_minutes_max')
+    final int? estimatedDeliveryMinutesMax,
     required final double minimumOrderAmount,
+    @JsonKey(name: 'delivery_fee_amount') final double deliveryFeeAmount,
     final bool isOpen,
     final bool hasFreeDelivery,
     final bool isSponsored,
@@ -391,7 +443,13 @@ abstract class _RestaurantSummary implements RestaurantSummary {
   @override
   int get estimatedDeliveryMinutes;
   @override
+  @JsonKey(name: 'estimated_delivery_minutes_max')
+  int? get estimatedDeliveryMinutesMax;
+  @override
   double get minimumOrderAmount;
+  @override
+  @JsonKey(name: 'delivery_fee_amount')
+  double get deliveryFeeAmount;
   @override
   bool get isOpen;
   @override

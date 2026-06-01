@@ -24,7 +24,7 @@ Order payload (customer-visible):
 
 - `restaurant` → `OrderRestaurantDetails`: `id`, `name`, `phone`, `address`, `coordinates` (`latitude`, `longitude`).
 - `customer_contact` (optional) → `CustomerDeliveryContact`: `name`, `phone` for the person receiving the delivery.
-- `delivery_address` → existing `Address` (includes `apartment`, `floor`, `delivery_instructions`, `location`).
+- `delivery_address` → `DeliveryAddress` (includes `apartment`, `floor`, `delivery_instructions`, `location` coordinates, optional `is_delivery_point_confirmed`).
 - `driver` (optional) → `DriverSummary`: `id`, `name`, `phone`, `rating`, `vehicle_type` (`DriverVehicleType`).
 - `loyalty_points_earned` (optional int): points credited when the order completes (snapshot for receipts).
 - `pricing` → `OrderPricing` (see below).

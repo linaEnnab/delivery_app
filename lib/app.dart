@@ -1,6 +1,7 @@
 import 'package:delivery_app/core/di/app_providers.dart';
 import 'package:delivery_app/core/theme/app_theme.dart';
 import 'package:delivery_app/core/theme/theme_mode_provider.dart';
+import 'package:delivery_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,12 +17,20 @@ class DeliveryApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Delivery',
       debugShowCheckedModeBanner: false,
-      // RTL-first marketplace: Arabic default locale drives directional layout.
+      onGenerateTitle: (context) => AppLocalizations.of(context).authAppTitle,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       locale: const Locale('ar'),
-      supportedLocales: const [
-        Locale('ar'),
-        Locale('en'),
-      ],
+      localeResolutionCallback: (locale, supported) {
+        if (locale != null) {
+          for (final s in supported) {
+            if (s.languageCode == locale.languageCode) {
+              return s;
+            }
+          }
+        }
+        return const Locale('ar');
+      },
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: themeMode,

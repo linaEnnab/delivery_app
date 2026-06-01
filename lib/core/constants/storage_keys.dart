@@ -4,6 +4,7 @@ abstract final class StorageKeys {
   static const refreshToken = 'refresh_token';
   static const userId = 'user_id';
   static const themeMode = 'theme_mode';
+  static const onboardingCompleted = 'onboarding_completed';
   static const locale = 'locale';
   static const cartSessionId = 'cart_session_id';
   static const fcmToken = 'fcm_token';

@@ -26,6 +26,7 @@ class CartItem with _$CartItem {
     required int quantity,
     required Money unitPrice,
     required Money lineTotal,
+    String? imageUrl,
     @Default([]) List<SelectedProductOption> selectedOptions,
     String? specialInstructions,
   }) = _CartItem;

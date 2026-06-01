@@ -17,7 +17,7 @@ _$OrderImpl _$$OrderImplFromJson(Map<String, dynamic> json) => _$OrderImpl(
       .map((e) => CartItem.fromJson(e as Map<String, dynamic>))
       .toList(),
   pricing: OrderPricing.fromJson(json['pricing'] as Map<String, dynamic>),
-  deliveryAddress: Address.fromJson(
+  deliveryAddress: DeliveryAddress.fromJson(
     json['delivery_address'] as Map<String, dynamic>,
   ),
   paymentMethod: $enumDecode(_$PaymentMethodEnumMap, json['payment_method']),

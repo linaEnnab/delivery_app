@@ -32,4 +32,4 @@ Env files: `assets/env/.env.*`
 
 ## Project Status
 
-Foundation only — no feature screens yet. Router uses `RoutePlaceholder` (zero UI) until presentation is built.
+Foundation only — no feature screens yet. GoRouter exposes splash, onboarding, login, register, and home with empty `Scaffold` placeholder pages until presentation is built.

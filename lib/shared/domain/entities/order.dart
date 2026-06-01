@@ -1,4 +1,4 @@
-import 'package:delivery_app/shared/domain/entities/address.dart';
+import 'package:delivery_app/shared/domain/entities/delivery_address.dart';
 import 'package:delivery_app/shared/domain/entities/cart.dart';
 import 'package:delivery_app/shared/domain/entities/order_fulfillment.dart';
 import 'package:delivery_app/shared/domain/entities/order_pricing.dart';
@@ -20,7 +20,7 @@ class Order with _$Order {
     required OrderStatus status,
     required List<CartItem> items,
     required OrderPricing pricing,
-    required Address deliveryAddress,
+    required DeliveryAddress deliveryAddress,
     required PaymentMethod paymentMethod,
     CustomerDeliveryContact? customerContact,
     DriverSummary? driver,

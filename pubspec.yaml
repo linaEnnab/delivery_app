@@ -13,6 +13,8 @@ dependencies:
   equatable: ^2.0.7
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_dotenv: ^5.2.1
   flutter_riverpod: ^2.6.1
   flutter_secure_storage: ^9.2.4
@@ -35,7 +37,10 @@ dev_dependencies:
   json_serializable: ^6.9.5
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/env/
     - assets/config/
+    - assets/images/home_hero_akool.png
+    - assets/images/restaurant_detail_cover.png

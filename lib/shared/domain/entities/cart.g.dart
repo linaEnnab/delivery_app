@@ -34,6 +34,7 @@ _$CartItemImpl _$$CartItemImplFromJson(Map<String, dynamic> json) =>
       quantity: (json['quantity'] as num).toInt(),
       unitPrice: Money.fromJson(json['unit_price'] as Map<String, dynamic>),
       lineTotal: Money.fromJson(json['line_total'] as Map<String, dynamic>),
+      imageUrl: json['image_url'] as String?,
       selectedOptions:
           (json['selected_options'] as List<dynamic>?)
               ?.map(
@@ -54,6 +55,7 @@ Map<String, dynamic> _$$CartItemImplToJson(
   'quantity': instance.quantity,
   'unit_price': instance.unitPrice.toJson(),
   'line_total': instance.lineTotal.toJson(),
+  if (instance.imageUrl case final value?) 'image_url': value,
   'selected_options': instance.selectedOptions.map((e) => e.toJson()).toList(),
   if (instance.specialInstructions case final value?)
     'special_instructions': value,

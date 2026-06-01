@@ -3,8 +3,10 @@ import 'package:delivery_app/core/config/env/app_flavor.dart';
 import 'package:delivery_app/core/config/env/env_config.dart';
 import 'package:delivery_app/core/di/app_providers.dart';
 import 'package:delivery_app/core/network/dio_client.dart';
+import 'package:delivery_app/core/startup/onboarding_completion_provider.dart';
 import 'package:delivery_app/core/storage/token_storage.dart';
 import 'package:delivery_app/core/theme/theme_mode_provider.dart';
+import 'package:delivery_app/features/auth/presentation/providers/auth_session_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -40,6 +42,10 @@ Future<void> bootstrap({AppFlavor flavor = AppFlavor.development}) async {
   );
 
   await container.read(themeModeProvider.notifier).loadSavedTheme();
+  await container
+      .read(onboardingCompletedNotifierProvider.notifier)
+      .hydrateFromPrefs();
+  await container.read(authSessionNotifierProvider.notifier).restoreFromStorage();
 
   runApp(
     UncontrolledProviderScope(
