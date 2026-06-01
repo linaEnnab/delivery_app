@@ -86,5 +86,255 @@
         "type": "int"
       }
     }
-  }
+  },
+  "checkoutTitle": "Checkout",
+  "checkoutDeliverySection": "Delivery address",
+  "checkoutCityLabel": "City",
+  "checkoutStreetLabel": "Address",
+  "checkoutAddEditAddress": "Add / edit address",
+  "checkoutAddressDetailsTitle": "Address details",
+  "checkoutBuildingNumber": "Building number",
+  "checkoutApartmentNumber": "Apartment number",
+  "checkoutFloorNumber": "Floor number",
+  "checkoutDeliveryNotes": "Delivery notes",
+  "checkoutPaymentTitle": "Payment method",
+  "checkoutPaymentCod": "Cash on delivery",
+  "checkoutPaymentCard": "Card",
+  "checkoutPaymentCardPlaceholder": "Coming soon",
+  "checkoutPlaceOrder": "Place order",
+  "checkoutSubmitOrder": "Submit order",
+  "checkoutRewardAppliedBadge": "Reward",
+  "checkoutRewardWinHeadline": "You won!",
+  "checkoutRewardWheelTitle": "Reward wheel",
+  "checkoutRewardWheelSubtitle": "Spin once before you submit. Prizes apply to this order in the demo.",
+  "checkoutRewardLoyaltySummaryLabel": "Loyalty bonus",
+  "checkoutRewardLoyaltySummaryValue": "+{points} pts",
+  "@checkoutRewardLoyaltySummaryValue": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "checkoutPlaceOrderDemo": "Your order was received (demo).",
+  "checkoutEmptyCartTitle": "Cart is empty",
+  "checkoutEmptyCartSubtitle": "Add items before checking out.",
+  "deliveryAddressTitleAdd": "Add address",
+  "deliveryAddressTitleEdit": "Edit address",
+  "deliveryAddressDetectedCityLabel": "Detected city",
+  "deliveryAddressDetectedAreaLabel": "Detected area",
+  "deliveryAddressFullAddressLabel": "Full delivery address",
+  "deliveryAddressFullAddressHint": "Street, nearest landmark…",
+  "deliveryAddressChooseOnMap": "Choose on map",
+  "deliveryAddressMapSectionHint": "The pin will be used later for time and fee estimates.",
+  "deliveryAddressMapPickerComingSoon": "The map picker will open when Google Maps is connected.",
+  "deliveryAddressPinConfirmedLabel": "Delivery point confirmed",
+  "deliveryAddressSave": "Save address",
+  "deliveryAddressStreetRequired": "Please enter the full delivery address.",
+  "deliveryAddressSnackbarSaved": "Address saved",
+  "deliveryAddressDemoCityValue": "Gaza",
+  "deliveryAddressDemoAreaValue": "Al-Rimal",
+  "orderSuccessHeadline": "Your order is confirmed!",
+  "orderSuccessIconSemantics": "Success: order confirmed",
+  "orderSuccessOrderNumberLabel": "Order number",
+  "orderSuccessRestaurantLabel": "Restaurant",
+  "orderSuccessEtaLabel": "Estimated delivery",
+  "orderSuccessEtaRange": "{min}–{max} min",
+  "@orderSuccessEtaRange": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "orderSuccessTrackOrder": "Track order",
+  "orderSuccessBackHome": "Back to home",
+  "orderSuccessTrackSnackbar": "Order tracking will be available soon.",
+  "myOrdersHeadline": "My orders",
+  "myOrdersActiveSection": "Active orders",
+  "myOrdersCompletedSection": "Completed orders",
+  "myOrdersEmptyActive": "You have no active orders right now.",
+  "myOrdersEmptyCompleted": "No completed orders yet.",
+  "myOrdersTapToTrackSemantics": "Track order",
+  "myOrdersFieldStatus": "Status",
+  "myOrdersFieldTotal": "Order total",
+  "myOrdersFieldDate": "Date",
+  "orderStatusPending": "Pending",
+  "orderStatusRestaurantAccepted": "Restaurant accepted",
+  "orderStatusPreparing": "Preparing",
+  "orderStatusReadyForPickup": "Ready for pickup",
+  "orderStatusDriverAssigned": "Driver assigned",
+  "orderStatusPickedUp": "Picked up",
+  "orderStatusOnTheWay": "On the way",
+  "orderStatusDelivered": "Delivered",
+  "orderStatusCancelled": "Cancelled",
+  "orderTrackingTitle": "Order tracking",
+  "orderTrackingTimelineTitle": "Order status",
+  "orderTrackingDriverLabel": "Driver",
+  "orderTrackingRatingLabel": "Rating",
+  "orderTrackingEtaLabel": "Estimated arrival",
+  "orderTrackingDriverNotAssigned": "Not assigned yet",
+  "orderTrackingMapTitle": "Map",
+  "orderTrackingMapBody": "Live map preview will appear when Google Maps is connected.",
+  "orderTrackingUnknownOrder": "We could not find this order.",
+  "orderTrackingDemoHint": "Demo view — live tracking will connect here later.",
+  "orderTrackingCancelledHeadline": "This order was cancelled.",
+  "orderTrackingRateOrder": "Rate order",
+  "orderReviewTitle": "Rate your order",
+  "orderReviewSummaryTitle": "Order summary",
+  "orderReviewRestaurantRating": "Restaurant rating",
+  "orderReviewDriverRating": "Driver rating",
+  "orderReviewCommentLabel": "Your comment (optional)",
+  "orderReviewCommentHint": "How was your experience?",
+  "orderReviewAddImages": "Add photos",
+  "orderReviewImagesSectionHint": "Placeholder preview — real uploads will be enabled later.",
+  "orderReviewRemoveImageSemantics": "Remove photo",
+  "orderReviewImagePreviewSemantics": "Review photo preview",
+  "orderReviewSubmit": "Submit review",
+  "orderReviewSubmittedSnackbar": "Thanks for your feedback!",
+  "orderReviewNotDeliveredBody": "Reviews are only available after delivery is completed.",
+  "orderReviewAlreadySubmittedBody": "A review has already been submitted for this order.",
+  "orderReviewUnknownOrderBody": "We could not find this order.",
+  "orderReviewBack": "Back",
+  "orderReviewSelectBothRatingsHint": "Please rate both the restaurant and the driver.",
+  "orderReviewMaxImagesSnackbar": "You can attach up to {max} photos.",
+  "@orderReviewMaxImagesSnackbar": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "orderReviewMockImageAddedSnackbar": "Photo added (demo preview).",
+  "orderReviewSetStarSemantics": "Set rating to {rating} out of 5",
+  "@orderReviewSetStarSemantics": {
+    "placeholders": {
+      "rating": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardsHeadline": "Loyalty & rewards",
+  "rewardsCurrentPointsSection": "Your points",
+  "rewardsTotalPointsLabel": "Total points",
+  "rewardsPointsNeededForNextLabel": "Points to next reward",
+  "rewardsAvailableSection": "Available rewards",
+  "rewardsRewardFreeDelivery": "Free delivery",
+  "rewardsRewardDiscount10": "10% discount",
+  "rewardsRewardDiscount20": "20% discount",
+  "rewardsRewardFreeFries": "Free fries",
+  "rewardsRewardFreeDrink": "Free drink",
+  "rewardsRewardFreeSauce": "Free sauce",
+  "rewardsHistorySection": "Reward history",
+  "rewardsEarnedSection": "Earned points",
+  "rewardsRedeemedSection": "Redeemed rewards",
+  "rewardsHistoryPointsEarned": "+{points}",
+  "@rewardsHistoryPointsEarned": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsHistoryEarnedOrder": "Completed order · {orderRef}",
+  "@rewardsHistoryEarnedOrder": {
+    "placeholders": {
+      "orderRef": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsHistoryEarnedReview": "Review bonus",
+  "rewardsHistoryEarnedReferral": "Referral bonus",
+  "rewardsHistoryRedeemedFreeDelivery": "Free delivery",
+  "rewardsHistoryRedeemedDiscount10": "10% discount",
+  "rewardsHistoryRedeemedDiscount20": "20% discount",
+  "rewardsHistoryRedeemedFreeFries": "Free fries",
+  "rewardsHistoryRedeemedFreeDrink": "Free drink",
+  "rewardsHistoryRedeemedFreeSauce": "Free sauce",
+  "rewardsSpinSection": "Spin wheel",
+  "rewardsSpinEligibilityLabel": "Current eligibility",
+  "rewardsSpinEligible": "You can spin the wheel",
+  "rewardsSpinNotEligible": "Not enough points yet",
+  "rewardsSpinRequiredLabel": "Points required per spin",
+  "rewardsSpinRequiredValue": "{points}",
+  "@rewardsSpinRequiredValue": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsSpinButton": "Spin the wheel",
+  "rewardsSpinComingSoonSnackbar": "Spin wheel will be enabled soon.",
+  "rewardsSpinDisabledHint": "Reach {points} points to unlock a spin",
+  "@rewardsSpinDisabledHint": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsPointsShortUnit": "pts",
+  "rewardsCheckoutWheelTitle": "Checkout reward wheel",
+  "rewardsCheckoutWheelBody": "At checkout, tap Place order to spin once and apply a prize to this basket (demo).",
+  "rewardsCheckoutWheelBodyEmptyCart": "Add items to your cart, open checkout, then spin before you submit.",
+  "rewardsCheckoutWheelOpenCheckout": "Open checkout",
+  "rewardWheelScreenTitle": "Reward wheel",
+  "rewardWheelScreenSubtitle": "Spin happens at checkout before you submit. Open your cart, go to checkout, tap Place order, then claim your prize (demo).",
+  "rewardWheelGoToCartCta": "Go to cart",
+  "rewardWheelSpinButton": "Spin the wheel",
+  "rewardWheelNoSpinsTitle": "No spins available",
+  "rewardWheelNoSpinsBody": "When an order is delivered, you will see the spin action here and on order tracking.",
+  "rewardWheelUnknownOrderTitle": "Order not found",
+  "rewardWheelUnknownOrderBody": "This order could not be found in the demo data.",
+  "rewardWheelAlreadyUsedTitle": "Spin already used",
+  "rewardWheelAlreadyUsedBody": "You already used the post-delivery wheel for order {orderNumber}.",
+  "@rewardWheelAlreadyUsedBody": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardWheelForOrderLabel": "Order {orderNumber}",
+  "@rewardWheelForOrderLabel": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardWheelHistoryTitle": "Wheel reward history",
+  "rewardWheelHistoryEmpty": "Your wheel wins will appear here.",
+  "rewardWheelHistoryOrderLine": "Order {orderNumber}",
+  "@rewardWheelHistoryOrderLine": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardWheelHistoryCheckoutOrderLine": "Current order (checkout)",
+  "rewardWheelHistoryClaimedBadge": "Claimed",
+  "rewardWheelHistorySavedBadge": "Saved to account",
+  "rewardWheelCelebrationBarrierLabel": "Dismiss",
+  "rewardWheelCelebrationHeadline": "Congratulations!",
+  "rewardWheelClaimButton": "Claim reward",
+  "rewardWheelContinueButton": "Continue",
+  "rewardWheelPrizeFreeColaTitle": "Free cola",
+  "rewardWheelPrizeFreeColaDescription": "We add a cola drink to this order at no charge (demo).",
+  "rewardWheelPrizeFreeFriesTitle": "Free fries",
+  "rewardWheelPrizeFreeFriesDescription": "We add fries to this order at no charge (demo).",
+  "rewardWheelPrizeMealDiscount50Title": "50% off this order",
+  "rewardWheelPrizeMealDiscount50Description": "Half off your food subtotal for this checkout (demo).",
+  "rewardWheelPrizeFreeDeliveryTitle": "Free delivery",
+  "rewardWheelPrizeFreeDeliveryDescription": "Delivery fee is waived for this order (demo).",
+  "rewardWheelPrizeLoyalty25Title": "25 loyalty points",
+  "rewardWheelPrizeLoyalty25Description": "Bonus points for your rewards balance (mock).",
+  "rewardWheelPrizeLoyalty50Title": "50 loyalty points",
+  "rewardWheelPrizeLoyalty50Description": "A bigger bonus toward your next reward (mock)."
 }

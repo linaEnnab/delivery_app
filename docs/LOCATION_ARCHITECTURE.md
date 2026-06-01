@@ -24,6 +24,10 @@ Two **separate** location concepts drive different parts of the customer app. Th
 
 Structural fields on `DeliveryAddress`: building number, apartment number, floor number, delivery notes (wire: `building`, `apartment`, `floor`, `delivery_instructions`). Coordinates live on `deliveryPoint` (wire: `location`). `isDeliveryPointConfirmed` is the client flag that the user locked the pin (optional on wire for backward compatibility).
 
+### Map picker (checkout UI)
+
+The checkout flow uses [`DeliveryAddressPage`](../lib/features/checkout/presentation/pages/delivery_address_page.dart) for structural edits. Map gestures are delegated to [`DeliveryAddressMapSelectionPort`](../lib/features/checkout/domain/ports/delivery_address_map_selection_port.dart). Override `deliveryAddressMapSelectionPortProvider` (Riverpod) with a Google Maps–backed implementation when integrating the SDK; until then [`NoOpDeliveryAddressMapSelectionPort`](../lib/features/checkout/data/no_op_delivery_address_map_selection_port.dart) keeps UX in place with a “coming soon” snackbar.
+
 ## 3. Future backend geo capabilities
 
 Distance, driver routing, restaurant proximity, and delivery-fee quotes are modeled as a **single** server-facing contract so they can share one maps/pricing integration:

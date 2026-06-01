@@ -1,11 +1,15 @@
 import 'package:delivery_app/core/router/cart_route.dart';
+import 'package:delivery_app/core/router/checkout_route.dart';
 import 'package:delivery_app/core/router/forgot_password_route.dart';
 import 'package:delivery_app/core/router/go_router_refresh.dart';
 import 'package:delivery_app/core/router/home_route.dart';
 import 'package:delivery_app/core/router/login_route.dart';
 import 'package:delivery_app/core/router/onboarding_route.dart';
+import 'package:delivery_app/core/router/order_review_route.dart';
+import 'package:delivery_app/core/router/order_tracking_route.dart';
 import 'package:delivery_app/core/router/register_route.dart';
 import 'package:delivery_app/core/router/restaurant_detail_route.dart';
+import 'package:delivery_app/core/router/reward_wheel_route.dart';
 import 'package:delivery_app/core/router/route_paths.dart';
 import 'package:delivery_app/core/router/splash_route.dart';
 import 'package:delivery_app/core/startup/onboarding_completion_provider.dart';
@@ -32,7 +36,11 @@ GoRouter createAppRouter(Ref ref) {
       ForgotPasswordRoute.goRoute,
       HomeRoute.goRoute,
       CartRoute.goRoute,
+      CheckoutRoute.goRoute,
       RestaurantDetailRoute.goRoute,
+      OrderTrackingRoute.goRoute,
+      OrderReviewRoute.goRoute,
+      RewardWheelRoute.goRoute,
     ],
   );
 }
@@ -61,7 +69,18 @@ String? _redirect(Ref ref, GoRouterState state) {
     return RoutePaths.login;
   }
 
-  if (state.uri.path == RoutePaths.cart) {
+  if (state.uri.path == RoutePaths.cart ||
+      state.uri.path == RoutePaths.checkout ||
+      state.uri.path == RoutePaths.checkoutDeliveryAddress ||
+      state.uri.path == RoutePaths.checkoutOrderSuccess) {
+    return RoutePaths.login;
+  }
+
+  if (state.uri.path.startsWith('/orders/')) {
+    return RoutePaths.login;
+  }
+
+  if (state.uri.path == RoutePaths.rewardWheel) {
     return RoutePaths.login;
   }
 

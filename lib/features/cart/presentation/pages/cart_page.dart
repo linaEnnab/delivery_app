@@ -1,14 +1,19 @@
+import 'package:delivery_app/core/router/route_names.dart';
 import 'package:delivery_app/core/theme/app_radius.dart';
 import 'package:delivery_app/core/theme/app_spacing.dart';
 import 'package:delivery_app/core/utils/format_money.dart';
 import 'package:delivery_app/features/cart/presentation/providers/cart_providers.dart';
 import 'package:delivery_app/features/cart/presentation/utils/cart_totals.dart';
+import 'package:delivery_app/features/reward_wheel/domain/wheel_reward_kind.dart';
+import 'package:delivery_app/features/reward_wheel/domain/wheel_reward_kind_helpers.dart';
+import 'package:delivery_app/features/reward_wheel/presentation/providers/pre_order_wheel_provider.dart';
 import 'package:delivery_app/l10n/app_localizations.dart';
 import 'package:delivery_app/shared/domain/entities/cart.dart';
 import 'package:delivery_app/shared/domain/value_objects/money.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 /// Shopping cart — mock commerce only; RTL-safe layout.
 class CartPage extends ConsumerWidget {
@@ -20,7 +25,11 @@ class CartPage extends ConsumerWidget {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final cart = ref.watch(cartNotifierProvider);
-    final totals = computeCartTotals(cart.items);
+    final claimed = ref.watch(preOrderWheelProvider).claimedReward;
+    final totals = computeCartTotals(
+      cart.items,
+      appliedCheckoutReward: claimed,
+    );
     final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     Future<void> confirmClear() async {
@@ -43,6 +52,7 @@ class CartPage extends ConsumerWidget {
       );
       if (ok == true && context.mounted) {
         ref.read(cartNotifierProvider.notifier).clear();
+        ref.read(preOrderWheelProvider.notifier).clear();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l10n.cartClearedSnackbar)),
         );
@@ -123,6 +133,7 @@ class CartPage extends ConsumerWidget {
                       scheme: scheme,
                       textTheme: textTheme,
                       totals: totals,
+                      claimedReward: claimed,
                       formatMoney: (m) => formatMoneyForLocale(context, m),
                     ),
                   ),
@@ -151,9 +162,7 @@ class CartPage extends ConsumerWidget {
                     height: AppSpacing.minTapTarget,
                     child: FilledButton(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.cartCheckoutComingSoon)),
-                        );
+                        context.pushNamed(RouteNames.checkout);
                       },
                       child: Text(
                         '${l10n.cartCheckout} · ${formatMoneyForLocale(context, totals.finalTotal)}',
@@ -394,6 +403,7 @@ class _OrderSummaryCard extends StatelessWidget {
     required this.scheme,
     required this.textTheme,
     required this.totals,
+    required this.claimedReward,
     required this.formatMoney,
   });
 
@@ -401,10 +411,12 @@ class _OrderSummaryCard extends StatelessWidget {
   final ColorScheme scheme;
   final TextTheme textTheme;
   final CartTotals totals;
+  final WheelRewardKind? claimedReward;
   final String Function(Money) formatMoney;
 
   @override
   Widget build(BuildContext context) {
+    final bonus = claimedReward?.loyaltyPointsBonus ?? 0;
     return Material(
       color: scheme.surfaceContainerLow,
       elevation: 0,
@@ -444,6 +456,16 @@ class _OrderSummaryCard extends StatelessWidget {
               textTheme: textTheme,
               valueColor: scheme.tertiary,
             ),
+            if (bonus > 0) ...[
+              SizedBox(height: AppSpacing.sm),
+              _SummaryRow(
+                label: l10n.checkoutRewardLoyaltySummaryLabel,
+                value: l10n.checkoutRewardLoyaltySummaryValue(bonus),
+                scheme: scheme,
+                textTheme: textTheme,
+                valueColor: scheme.secondary,
+              ),
+            ],
             Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
               child: Divider(color: scheme.outlineVariant),

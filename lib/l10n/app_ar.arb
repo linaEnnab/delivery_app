@@ -86,5 +86,255 @@
         "type": "int"
       }
     }
-  }
+  },
+  "checkoutTitle": "الدفع",
+  "checkoutDeliverySection": "عنوان التوصيل",
+  "checkoutCityLabel": "المدينة",
+  "checkoutStreetLabel": "العنوان",
+  "checkoutAddEditAddress": "إضافة / تعديل العنوان",
+  "checkoutAddressDetailsTitle": "تفاصيل العنوان",
+  "checkoutBuildingNumber": "رقم المبنى",
+  "checkoutApartmentNumber": "رقم الشقة",
+  "checkoutFloorNumber": "رقم الطابق",
+  "checkoutDeliveryNotes": "ملاحظات التوصيل",
+  "checkoutPaymentTitle": "طريقة الدفع",
+  "checkoutPaymentCod": "الدفع عند الاستلام",
+  "checkoutPaymentCard": "البطاقة",
+  "checkoutPaymentCardPlaceholder": "قريبًا",
+  "checkoutPlaceOrder": "تأكيد الطلب",
+  "checkoutSubmitOrder": "إرسال الطلب",
+  "checkoutRewardAppliedBadge": "مكافأة",
+  "checkoutRewardWinHeadline": "لقد ربحت!",
+  "checkoutRewardWheelTitle": "عجلة المكافآت",
+  "checkoutRewardWheelSubtitle": "تدور مرة واحدة قبل الإرسال النهائي. الجوائز تُطبَّق على هذا الطلب في العرض التجريبي.",
+  "checkoutRewardLoyaltySummaryLabel": "مكافأة الولاء",
+  "checkoutRewardLoyaltySummaryValue": "+{points} نقطة",
+  "@checkoutRewardLoyaltySummaryValue": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "checkoutPlaceOrderDemo": "تم استلام طلبك (تجريبي)",
+  "checkoutEmptyCartTitle": "السلة فارغة",
+  "checkoutEmptyCartSubtitle": "أضف أصنافًا قبل إتمام الطلب.",
+  "deliveryAddressTitleAdd": "إضافة عنوان",
+  "deliveryAddressTitleEdit": "تعديل العنوان",
+  "deliveryAddressDetectedCityLabel": "المدينة المكتشفة",
+  "deliveryAddressDetectedAreaLabel": "المنطقة المكتشفة",
+  "deliveryAddressFullAddressLabel": "عنوان التوصيل الكامل",
+  "deliveryAddressFullAddressHint": "الشارع، أقرب معلم…",
+  "deliveryAddressChooseOnMap": "تحديد الموقع على الخريطة",
+  "deliveryAddressMapSectionHint": "يُستخدم الموقع لاحقًا لحساب الوقت ورسوم التوصيل.",
+  "deliveryAddressMapPickerComingSoon": "سيتم فتح الخريطة عند الربط مع خرائط جوجل.",
+  "deliveryAddressPinConfirmedLabel": "تم تأكيد نقطة التوصيل",
+  "deliveryAddressSave": "حفظ العنوان",
+  "deliveryAddressStreetRequired": "يرجى إدخال عنوان التوصيل الكامل.",
+  "deliveryAddressSnackbarSaved": "تم حفظ العنوان",
+  "deliveryAddressDemoCityValue": "غزة",
+  "deliveryAddressDemoAreaValue": "الرمال",
+  "orderSuccessHeadline": "تم تأكيد طلبك!",
+  "orderSuccessIconSemantics": "نجاح: تم تأكيد الطلب",
+  "orderSuccessOrderNumberLabel": "رقم الطلب",
+  "orderSuccessRestaurantLabel": "المطعم",
+  "orderSuccessEtaLabel": "الوقت المتوقع للتوصيل",
+  "orderSuccessEtaRange": "{min}–{max} دقيقة",
+  "@orderSuccessEtaRange": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "orderSuccessTrackOrder": "تتبع الطلب",
+  "orderSuccessBackHome": "العودة إلى الرئيسية",
+  "orderSuccessTrackSnackbar": "تتبع الطلب سيتوفر قريبًا.",
+  "myOrdersHeadline": "طلباتي",
+  "myOrdersActiveSection": "طلبات نشطة",
+  "myOrdersCompletedSection": "طلبات مكتملة",
+  "myOrdersEmptyActive": "لا توجد طلبات نشطة حاليًا.",
+  "myOrdersEmptyCompleted": "لا توجد طلبات مكتملة بعد.",
+  "myOrdersTapToTrackSemantics": "تتبع الطلب",
+  "myOrdersFieldStatus": "الحالة",
+  "myOrdersFieldTotal": "إجمالي الطلب",
+  "myOrdersFieldDate": "التاريخ",
+  "orderStatusPending": "قيد الانتظار",
+  "orderStatusRestaurantAccepted": "تم قبول الطلب من المطعم",
+  "orderStatusPreparing": "قيد التحضير",
+  "orderStatusReadyForPickup": "جاهز للاستلام",
+  "orderStatusDriverAssigned": "تم تعيين السائق",
+  "orderStatusPickedUp": "تم الاستلام من المطعم",
+  "orderStatusOnTheWay": "في الطريق",
+  "orderStatusDelivered": "تم التوصيل",
+  "orderStatusCancelled": "ملغى",
+  "orderTrackingTitle": "تتبع الطلب",
+  "orderTrackingTimelineTitle": "مسار الطلب",
+  "orderTrackingDriverLabel": "السائق",
+  "orderTrackingRatingLabel": "التقييم",
+  "orderTrackingEtaLabel": "الوقت المتوقع للوصول",
+  "orderTrackingDriverNotAssigned": "لم يُعيَّن بعد",
+  "orderTrackingMapTitle": "الخريطة",
+  "orderTrackingMapBody": "معاينة الخريطة ستُفعَّل عند ربط خرائط جوجل.",
+  "orderTrackingUnknownOrder": "لم يُعثر على هذا الطلب.",
+  "orderTrackingDemoHint": "عرض تجريبي — سيتم ربط التتبع المباشر لاحقًا.",
+  "orderTrackingCancelledHeadline": "تم إلغاء هذا الطلب.",
+  "orderTrackingRateOrder": "قيّم الطلب",
+  "orderReviewTitle": "تقييم الطلب",
+  "orderReviewSummaryTitle": "ملخص الطلب",
+  "orderReviewRestaurantRating": "تقييم المطعم",
+  "orderReviewDriverRating": "تقييم السائق",
+  "orderReviewCommentLabel": "تعليقك (اختياري)",
+  "orderReviewCommentHint": "كيف كانت تجربتك؟",
+  "orderReviewAddImages": "إضافة صور",
+  "orderReviewImagesSectionHint": "معاينة وهمية — رفع الصور الحقيقي سيُفعَّل لاحقًا.",
+  "orderReviewRemoveImageSemantics": "إزالة الصورة",
+  "orderReviewImagePreviewSemantics": "معاينة صورة التقييم",
+  "orderReviewSubmit": "إرسال التقييم",
+  "orderReviewSubmittedSnackbar": "شكرًا لتقييمك!",
+  "orderReviewNotDeliveredBody": "التقييم متاح فقط بعد اكتمال التوصيل.",
+  "orderReviewAlreadySubmittedBody": "تم إرسال تقييم لهذا الطلب مسبقًا.",
+  "orderReviewUnknownOrderBody": "لم يُعثر على هذا الطلب.",
+  "orderReviewBack": "رجوع",
+  "orderReviewSelectBothRatingsHint": "يرجى اختيار تقييم للمطعم وللسائق.",
+  "orderReviewMaxImagesSnackbar": "يمكنك إرفاق حتى {max} صور كحد أقصى.",
+  "@orderReviewMaxImagesSnackbar": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "orderReviewMockImageAddedSnackbar": "تمت إضافة صورة (معاينة تجريبية).",
+  "orderReviewSetStarSemantics": "تعيين التقييم إلى {rating} من 5",
+  "@orderReviewSetStarSemantics": {
+    "placeholders": {
+      "rating": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardsHeadline": "المكافآت والولاء",
+  "rewardsCurrentPointsSection": "نقاطك الحالية",
+  "rewardsTotalPointsLabel": "إجمالي النقاط",
+  "rewardsPointsNeededForNextLabel": "النقاط للمكافأة التالية",
+  "rewardsAvailableSection": "المكافآت المتاحة",
+  "rewardsRewardFreeDelivery": "توصيل مجاني",
+  "rewardsRewardDiscount10": "خصم 10٪",
+  "rewardsRewardDiscount20": "خصم 20٪",
+  "rewardsRewardFreeFries": "بطاطا مجانية",
+  "rewardsRewardFreeDrink": "مشروب مجاني",
+  "rewardsRewardFreeSauce": "صوص مجاني",
+  "rewardsHistorySection": "سجل المكافآت",
+  "rewardsEarnedSection": "النقاط المكتسبة",
+  "rewardsRedeemedSection": "المكافآت المستبدَلة",
+  "rewardsHistoryPointsEarned": "+{points}",
+  "@rewardsHistoryPointsEarned": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsHistoryEarnedOrder": "طلب مكتمل · {orderRef}",
+  "@rewardsHistoryEarnedOrder": {
+    "placeholders": {
+      "orderRef": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsHistoryEarnedReview": "مكافأة تقييم",
+  "rewardsHistoryEarnedReferral": "مكافأة دعوة صديق",
+  "rewardsHistoryRedeemedFreeDelivery": "توصيل مجاني",
+  "rewardsHistoryRedeemedDiscount10": "خصم 10٪",
+  "rewardsHistoryRedeemedDiscount20": "خصم 20٪",
+  "rewardsHistoryRedeemedFreeFries": "بطاطا مجانية",
+  "rewardsHistoryRedeemedFreeDrink": "مشروب مجاني",
+  "rewardsHistoryRedeemedFreeSauce": "صوص مجاني",
+  "rewardsSpinSection": "عجلة المكافآت",
+  "rewardsSpinEligibilityLabel": "الأهلية الحالية",
+  "rewardsSpinEligible": "يمكنك تدوير العجلة",
+  "rewardsSpinNotEligible": "لا تملك نقاطًا كافية بعد",
+  "rewardsSpinRequiredLabel": "النقاط المطلوبة لكل دورة",
+  "rewardsSpinRequiredValue": "{points}",
+  "@rewardsSpinRequiredValue": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsSpinButton": "تدوير العجلة",
+  "rewardsSpinComingSoonSnackbar": "عجلة المكافآت ستُفعَّل قريبًا.",
+  "rewardsSpinDisabledHint": "اجمع {points} نقطة لتفعيل التدوير",
+  "@rewardsSpinDisabledHint": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardsPointsShortUnit": "نقطة",
+  "rewardsCheckoutWheelTitle": "عجلة المكافآت عند الدفع",
+  "rewardsCheckoutWheelBody": "في صفحة الدفع، اضغط «تأكيد الطلب» لدوران العجلة مرة وتطبيق الجائزة على هذه السلة (تجريبي).",
+  "rewardsCheckoutWheelBodyEmptyCart": "أضف أصنافًا إلى سلتك، ثم افتح الدفع، وادُر العجلة قبل الإرسال النهائي.",
+  "rewardsCheckoutWheelOpenCheckout": "فتح الدفع",
+  "rewardWheelScreenTitle": "عجلة المكافآت",
+  "rewardWheelScreenSubtitle": "التدوير يحدث في الدفع قبل الإرسال النهائي. افتح السلة، انتقل للدفع، اضغط «تأكيد الطلب»، ثم المطالبة بالجائزة (تجريبي).",
+  "rewardWheelGoToCartCta": "الذهاب إلى السلة",
+  "rewardWheelSpinButton": "ادر العجلة",
+  "rewardWheelNoSpinsTitle": "لا توجد فرص تدوير",
+  "rewardWheelNoSpinsBody": "عندما يُسلَّم طلبك ستجد زر التدوير هنا وفي صفحة تتبع الطلب.",
+  "rewardWheelUnknownOrderTitle": "الطلب غير موجود",
+  "rewardWheelUnknownOrderBody": "تعذّر العثور على هذا الطلب في العرض التجريبي.",
+  "rewardWheelAlreadyUsedTitle": "تم استخدام فرصة التدوير",
+  "rewardWheelAlreadyUsedBody": "استخدمتَ بالفعل عجلة المكافأة لهذا الطلب {orderNumber}.",
+  "@rewardWheelAlreadyUsedBody": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardWheelForOrderLabel": "الطلب {orderNumber}",
+  "@rewardWheelForOrderLabel": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardWheelHistoryTitle": "سجل عجلة المكافآت",
+  "rewardWheelHistoryEmpty": "ستظهر الجوائز التي تربحها هنا.",
+  "rewardWheelHistoryOrderLine": "الطلب {orderNumber}",
+  "@rewardWheelHistoryOrderLine": {
+    "placeholders": {
+      "orderNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "rewardWheelHistoryCheckoutOrderLine": "الطلب الحالي (الدفع)",
+  "rewardWheelHistoryClaimedBadge": "تمت المطالبة",
+  "rewardWheelHistorySavedBadge": "محفوظ في الحساب",
+  "rewardWheelCelebrationBarrierLabel": "إغلاق",
+  "rewardWheelCelebrationHeadline": "مبروك!",
+  "rewardWheelClaimButton": "المطالبة بالجائزة",
+  "rewardWheelContinueButton": "متابعة",
+  "rewardWheelPrizeFreeColaTitle": "كولا مجانًا",
+  "rewardWheelPrizeFreeColaDescription": "نضيف مشروب كولا إلى هذا الطلب دون رسوم (تجريبي).",
+  "rewardWheelPrizeFreeFriesTitle": "بطاطا مجانًا",
+  "rewardWheelPrizeFreeFriesDescription": "نضيف بطاطا مقلية إلى هذا الطلب دون رسوم (تجريبي).",
+  "rewardWheelPrizeMealDiscount50Title": "خصم ٥٠٪ على هذا الطلب",
+  "rewardWheelPrizeMealDiscount50Description": "خصم نصف مجموع أصناف الطعام لهذا الدفع (تجريبي).",
+  "rewardWheelPrizeFreeDeliveryTitle": "توصيل مجاني",
+  "rewardWheelPrizeFreeDeliveryDescription": "إلغاء رسوم التوصيل لهذا الطلب (تجريبي).",
+  "rewardWheelPrizeLoyalty25Title": "٢٥ نقطة ولاء",
+  "rewardWheelPrizeLoyalty25Description": "نقاط إضافية لرصيد المكافآت (تجريبي).",
+  "rewardWheelPrizeLoyalty50Title": "٥٠ نقطة ولاء",
+  "rewardWheelPrizeLoyalty50Description": "دفعة أكبر من نقاط الولاء (تجريبي)."
 }

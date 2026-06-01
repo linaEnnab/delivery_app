@@ -1,4 +1,6 @@
 import 'package:delivery_app/features/cart/data/mock_cart_checkout_constants.dart';
+import 'package:delivery_app/features/reward_wheel/domain/wheel_reward_kind.dart';
+import 'package:delivery_app/features/reward_wheel/domain/wheel_reward_kind_helpers.dart';
 import 'package:delivery_app/shared/domain/entities/cart.dart';
 import 'package:delivery_app/shared/domain/value_objects/money.dart';
 
@@ -17,7 +19,10 @@ final class CartTotals {
   final Money finalTotal;
 }
 
-CartTotals computeCartTotals(List<CartItem> items) {
+CartTotals computeCartTotals(
+  List<CartItem> items, {
+  WheelRewardKind? appliedCheckoutReward,
+}) {
   if (items.isEmpty) {
     const z = Money(amount: 0, currencyCode: 'ILS');
     return const CartTotals(
@@ -34,14 +39,23 @@ CartTotals computeCartTotals(List<CartItem> items) {
     subtotal = subtotal + item.lineTotal;
   }
 
-  final delivery = Money(
+  var delivery = Money(
     amount: MockCartCheckoutConstants.deliveryFee.amount,
     currencyCode: code,
   );
-  final discount = Money(
+  if (appliedCheckoutReward?.waivesDeliveryFee ?? false) {
+    delivery = Money(amount: 0, currencyCode: code);
+  }
+
+  var discount = Money(
     amount: MockCartCheckoutConstants.discount.amount,
     currencyCode: code,
   );
+
+  if (appliedCheckoutReward?.appliesMealHalfOff ?? false) {
+    final half = (subtotal.amount * 0.5 * 100).round() / 100;
+    discount = discount + Money(amount: half, currencyCode: code);
+  }
 
   var total = subtotal + delivery - discount;
   if (total.amount < 0) {

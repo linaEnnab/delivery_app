@@ -42,5 +42,6 @@ flutter:
   assets:
     - assets/env/
     - assets/config/
+    - assets/rewards/
     - assets/images/home_hero_akool.png
     - assets/images/restaurant_detail_cover.png

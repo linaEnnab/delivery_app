@@ -1,8 +1,6 @@
-/// Loyalty feature — points balance and transaction history.
-///
-/// Rewards catalog and redemption live in the `rewards` feature; spin wheel in
-/// the `spin_wheel` feature.
+/// Loyalty & rewards (mock data until backend wiring).
 library;
 
-export 'domain/repositories/loyalty_repository.dart';
-export 'presentation/providers/loyalty_providers.dart';
+export 'data/mock_loyalty_data.dart';
+export 'domain/loyalty_models.dart';
+export 'presentation/pages/rewards_page.dart';

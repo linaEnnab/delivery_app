@@ -1,4 +1,6 @@
 import 'package:delivery_app/features/home/presentation/pages/home_feed_tab.dart';
+import 'package:delivery_app/features/loyalty/presentation/pages/rewards_page.dart';
+import 'package:delivery_app/features/orders/presentation/pages/my_orders_page.dart';
 import 'package:delivery_app/l10n/app_localizations.dart';
 import 'package:delivery_app/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -25,18 +27,8 @@ class _HomePageState extends State<HomePage> {
         switchOutCurve: Curves.easeIn,
         child: switch (_index) {
           0 => const HomeFeedTab(),
-          1 => _PlaceholderTab(
-              key: const ValueKey('orders'),
-              title: l10n.homeTabOrdersTitle,
-              subtitle: l10n.homeTabOrdersSubtitle,
-              icon: Icons.receipt_long_rounded,
-            ),
-          2 => _PlaceholderTab(
-              key: const ValueKey('rewards'),
-              title: l10n.homeTabRewardsTitle,
-              subtitle: l10n.homeTabRewardsSubtitle,
-              icon: Icons.card_giftcard_rounded,
-            ),
+          1 => const MyOrdersPage(key: ValueKey('orders')),
+          2 => const RewardsPage(key: ValueKey('rewards')),
           _ => _PlaceholderTab(
               key: const ValueKey('profile'),
               title: l10n.homeTabProfileTitle,
