@@ -37,3 +37,14 @@ final class NotFoundException extends AppException {
 final class BusinessRuleException extends AppException {
   const BusinessRuleException(super.message);
 }
+
+/// Use when a Riverpod [FutureProvider] should surface [Failure.message] in the
+/// UI without an `Exception: ` prefix from [Exception.toString].
+final class UserMessageException implements Exception {
+  const UserMessageException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}

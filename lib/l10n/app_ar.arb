@@ -53,6 +53,8 @@
   "homeViewAll": "عرض الكل",
   "homeCategoriesSection": "التصنيفات",
   "homePromosSection": "عروض وخصومات",
+  "homeEmptyRestaurantsHint": "لا توجد مطاعم حالياً. تأكد أن الخادم يعمل ثم أعد المحاولة.",
+  "homeRetryRestaurants": "إعادة المحاولة",
   "homeTabOrdersTitle": "طلباتك",
   "homeTabOrdersSubtitle": "ستظهر طلباتك هنا قريبًا.",
   "homeTabRewardsTitle": "المكافآت",

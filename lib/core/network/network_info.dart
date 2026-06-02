@@ -22,6 +22,10 @@ final class NetworkInfoImpl implements NetworkInfo {
       _connectivity.onConnectivityChanged.map((r) => !_isOffline(r));
 
   bool _isOffline(List<ConnectivityResult> results) {
+    // `Iterable.every` is true on an empty list — without this guard, an empty
+    // result from the plugin is misread as offline and every API call shows
+    // "No internet connection" before Dio runs.
+    if (results.isEmpty) return false;
     return results.every((r) => r == ConnectivityResult.none);
   }
 }

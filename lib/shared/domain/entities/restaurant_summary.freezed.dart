@@ -24,6 +24,18 @@ mixin _$RestaurantSummary {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
+
+  /// Square / circular logo for detail header; optional on list cards.
+  String? get logoUrl => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
+
+  /// ISO-like currency code for formatting delivery fee / minimums.
+  @JsonKey(name: 'currency_code')
+  String get currencyCode => throw _privateConstructorUsedError;
+
+  /// Short line for hours / open state (from API or empty).
+  @JsonKey(name: 'opening_status_line')
+  String get openingStatusLine => throw _privateConstructorUsedError;
   double get rating => throw _privateConstructorUsedError;
   int get reviewCount => throw _privateConstructorUsedError;
   String get cuisineTags => throw _privateConstructorUsedError;
@@ -58,6 +70,10 @@ abstract class $RestaurantSummaryCopyWith<$Res> {
     String id,
     String name,
     String imageUrl,
+    String? logoUrl,
+    String description,
+    @JsonKey(name: 'currency_code') String currencyCode,
+    @JsonKey(name: 'opening_status_line') String openingStatusLine,
     double rating,
     int reviewCount,
     String cuisineTags,
@@ -90,6 +106,10 @@ class _$RestaurantSummaryCopyWithImpl<$Res, $Val extends RestaurantSummary>
     Object? id = null,
     Object? name = null,
     Object? imageUrl = null,
+    Object? logoUrl = freezed,
+    Object? description = null,
+    Object? currencyCode = null,
+    Object? openingStatusLine = null,
     Object? rating = null,
     Object? reviewCount = null,
     Object? cuisineTags = null,
@@ -114,6 +134,22 @@ class _$RestaurantSummaryCopyWithImpl<$Res, $Val extends RestaurantSummary>
             imageUrl: null == imageUrl
                 ? _value.imageUrl
                 : imageUrl // ignore: cast_nullable_to_non_nullable
+                      as String,
+            logoUrl: freezed == logoUrl
+                ? _value.logoUrl
+                : logoUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            description: null == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as String,
+            currencyCode: null == currencyCode
+                ? _value.currencyCode
+                : currencyCode // ignore: cast_nullable_to_non_nullable
+                      as String,
+            openingStatusLine: null == openingStatusLine
+                ? _value.openingStatusLine
+                : openingStatusLine // ignore: cast_nullable_to_non_nullable
                       as String,
             rating: null == rating
                 ? _value.rating
@@ -174,6 +210,10 @@ abstract class _$$RestaurantSummaryImplCopyWith<$Res>
     String id,
     String name,
     String imageUrl,
+    String? logoUrl,
+    String description,
+    @JsonKey(name: 'currency_code') String currencyCode,
+    @JsonKey(name: 'opening_status_line') String openingStatusLine,
     double rating,
     int reviewCount,
     String cuisineTags,
@@ -205,6 +245,10 @@ class __$$RestaurantSummaryImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? imageUrl = null,
+    Object? logoUrl = freezed,
+    Object? description = null,
+    Object? currencyCode = null,
+    Object? openingStatusLine = null,
     Object? rating = null,
     Object? reviewCount = null,
     Object? cuisineTags = null,
@@ -229,6 +273,22 @@ class __$$RestaurantSummaryImplCopyWithImpl<$Res>
         imageUrl: null == imageUrl
             ? _value.imageUrl
             : imageUrl // ignore: cast_nullable_to_non_nullable
+                  as String,
+        logoUrl: freezed == logoUrl
+            ? _value.logoUrl
+            : logoUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        description: null == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as String,
+        currencyCode: null == currencyCode
+            ? _value.currencyCode
+            : currencyCode // ignore: cast_nullable_to_non_nullable
+                  as String,
+        openingStatusLine: null == openingStatusLine
+            ? _value.openingStatusLine
+            : openingStatusLine // ignore: cast_nullable_to_non_nullable
                   as String,
         rating: null == rating
             ? _value.rating
@@ -282,6 +342,10 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
     required this.id,
     required this.name,
     required this.imageUrl,
+    this.logoUrl,
+    this.description = '',
+    @JsonKey(name: 'currency_code') this.currencyCode = 'JOD',
+    @JsonKey(name: 'opening_status_line') this.openingStatusLine = '',
     required this.rating,
     required this.reviewCount,
     required this.cuisineTags,
@@ -304,6 +368,23 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
   final String name;
   @override
   final String imageUrl;
+
+  /// Square / circular logo for detail header; optional on list cards.
+  @override
+  final String? logoUrl;
+  @override
+  @JsonKey()
+  final String description;
+
+  /// ISO-like currency code for formatting delivery fee / minimums.
+  @override
+  @JsonKey(name: 'currency_code')
+  final String currencyCode;
+
+  /// Short line for hours / open state (from API or empty).
+  @override
+  @JsonKey(name: 'opening_status_line')
+  final String openingStatusLine;
   @override
   final double rating;
   @override
@@ -332,7 +413,7 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
 
   @override
   String toString() {
-    return 'RestaurantSummary(id: $id, name: $name, imageUrl: $imageUrl, rating: $rating, reviewCount: $reviewCount, cuisineTags: $cuisineTags, estimatedDeliveryMinutes: $estimatedDeliveryMinutes, estimatedDeliveryMinutesMax: $estimatedDeliveryMinutesMax, minimumOrderAmount: $minimumOrderAmount, deliveryFeeAmount: $deliveryFeeAmount, isOpen: $isOpen, hasFreeDelivery: $hasFreeDelivery, isSponsored: $isSponsored)';
+    return 'RestaurantSummary(id: $id, name: $name, imageUrl: $imageUrl, logoUrl: $logoUrl, description: $description, currencyCode: $currencyCode, openingStatusLine: $openingStatusLine, rating: $rating, reviewCount: $reviewCount, cuisineTags: $cuisineTags, estimatedDeliveryMinutes: $estimatedDeliveryMinutes, estimatedDeliveryMinutesMax: $estimatedDeliveryMinutesMax, minimumOrderAmount: $minimumOrderAmount, deliveryFeeAmount: $deliveryFeeAmount, isOpen: $isOpen, hasFreeDelivery: $hasFreeDelivery, isSponsored: $isSponsored)';
   }
 
   @override
@@ -344,6 +425,13 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
+            (identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.currencyCode, currencyCode) ||
+                other.currencyCode == currencyCode) &&
+            (identical(other.openingStatusLine, openingStatusLine) ||
+                other.openingStatusLine == openingStatusLine) &&
             (identical(other.rating, rating) || other.rating == rating) &&
             (identical(other.reviewCount, reviewCount) ||
                 other.reviewCount == reviewCount) &&
@@ -378,6 +466,10 @@ class _$RestaurantSummaryImpl implements _RestaurantSummary {
     id,
     name,
     imageUrl,
+    logoUrl,
+    description,
+    currencyCode,
+    openingStatusLine,
     rating,
     reviewCount,
     cuisineTags,
@@ -412,6 +504,10 @@ abstract class _RestaurantSummary implements RestaurantSummary {
     required final String id,
     required final String name,
     required final String imageUrl,
+    final String? logoUrl,
+    final String description,
+    @JsonKey(name: 'currency_code') final String currencyCode,
+    @JsonKey(name: 'opening_status_line') final String openingStatusLine,
     required final double rating,
     required final int reviewCount,
     required final String cuisineTags,
@@ -434,6 +530,22 @@ abstract class _RestaurantSummary implements RestaurantSummary {
   String get name;
   @override
   String get imageUrl;
+
+  /// Square / circular logo for detail header; optional on list cards.
+  @override
+  String? get logoUrl;
+  @override
+  String get description;
+
+  /// ISO-like currency code for formatting delivery fee / minimums.
+  @override
+  @JsonKey(name: 'currency_code')
+  String get currencyCode;
+
+  /// Short line for hours / open state (from API or empty).
+  @override
+  @JsonKey(name: 'opening_status_line')
+  String get openingStatusLine;
   @override
   double get rating;
   @override

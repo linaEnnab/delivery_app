@@ -10,7 +10,8 @@ class ErrorInterceptor extends Interceptor {
       DioExceptionType.receiveTimeout ||
       DioExceptionType.sendTimeout =>
         const NetworkException('Request timed out'),
-      DioExceptionType.connectionError => const NetworkException(),
+      DioExceptionType.connectionError =>
+        NetworkException(_connectionErrorDetail(err)),
       DioExceptionType.badResponse => _mapBadResponse(err),
       DioExceptionType.cancel =>
         const ServerException('Request cancelled', code: 'cancelled'),
@@ -25,6 +26,17 @@ class ErrorInterceptor extends Interceptor {
         response: err.response,
       ),
     );
+  }
+
+  static String _connectionErrorDetail(DioException err) {
+    final inner = err.error;
+    if (inner != null) {
+      final t = inner.toString();
+      if (t.isNotEmpty) return t;
+    }
+    final m = err.message;
+    if (m != null && m.isNotEmpty) return m;
+    return 'Could not reach server';
   }
 
   AppException _mapBadResponse(DioException err) {

@@ -14,6 +14,8 @@ class Product with _$Product {
     required Money price,
     String? imageUrl,
     @Default([]) List<String> categoryIds,
+    /// Primary category label from API (for menu tabs when ids are opaque).
+    String? categoryName,
     @Default(true) bool isAvailable,
     @Default([]) List<ProductOptionGroup> optionGroups,
   }) = _Product;

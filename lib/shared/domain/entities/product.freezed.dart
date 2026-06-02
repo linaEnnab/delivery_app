@@ -28,6 +28,9 @@ mixin _$Product {
   Money get price => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   List<String> get categoryIds => throw _privateConstructorUsedError;
+
+  /// Primary category label from API (for menu tabs when ids are opaque).
+  String? get categoryName => throw _privateConstructorUsedError;
   bool get isAvailable => throw _privateConstructorUsedError;
   List<ProductOptionGroup> get optionGroups =>
       throw _privateConstructorUsedError;
@@ -54,6 +57,7 @@ abstract class $ProductCopyWith<$Res> {
     Money price,
     String? imageUrl,
     List<String> categoryIds,
+    String? categoryName,
     bool isAvailable,
     List<ProductOptionGroup> optionGroups,
   });
@@ -83,6 +87,7 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
     Object? price = null,
     Object? imageUrl = freezed,
     Object? categoryIds = null,
+    Object? categoryName = freezed,
     Object? isAvailable = null,
     Object? optionGroups = null,
   }) {
@@ -116,6 +121,10 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
                 ? _value.categoryIds
                 : categoryIds // ignore: cast_nullable_to_non_nullable
                       as List<String>,
+            categoryName: freezed == categoryName
+                ? _value.categoryName
+                : categoryName // ignore: cast_nullable_to_non_nullable
+                      as String?,
             isAvailable: null == isAvailable
                 ? _value.isAvailable
                 : isAvailable // ignore: cast_nullable_to_non_nullable
@@ -156,6 +165,7 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
     Money price,
     String? imageUrl,
     List<String> categoryIds,
+    String? categoryName,
     bool isAvailable,
     List<ProductOptionGroup> optionGroups,
   });
@@ -185,6 +195,7 @@ class __$$ProductImplCopyWithImpl<$Res>
     Object? price = null,
     Object? imageUrl = freezed,
     Object? categoryIds = null,
+    Object? categoryName = freezed,
     Object? isAvailable = null,
     Object? optionGroups = null,
   }) {
@@ -218,6 +229,10 @@ class __$$ProductImplCopyWithImpl<$Res>
             ? _value._categoryIds
             : categoryIds // ignore: cast_nullable_to_non_nullable
                   as List<String>,
+        categoryName: freezed == categoryName
+            ? _value.categoryName
+            : categoryName // ignore: cast_nullable_to_non_nullable
+                  as String?,
         isAvailable: null == isAvailable
             ? _value.isAvailable
             : isAvailable // ignore: cast_nullable_to_non_nullable
@@ -242,6 +257,7 @@ class _$ProductImpl implements _Product {
     required this.price,
     this.imageUrl,
     final List<String> categoryIds = const [],
+    this.categoryName,
     this.isAvailable = true,
     final List<ProductOptionGroup> optionGroups = const [],
   }) : _categoryIds = categoryIds,
@@ -271,6 +287,9 @@ class _$ProductImpl implements _Product {
     return EqualUnmodifiableListView(_categoryIds);
   }
 
+  /// Primary category label from API (for menu tabs when ids are opaque).
+  @override
+  final String? categoryName;
   @override
   @JsonKey()
   final bool isAvailable;
@@ -285,7 +304,7 @@ class _$ProductImpl implements _Product {
 
   @override
   String toString() {
-    return 'Product(id: $id, restaurantId: $restaurantId, name: $name, description: $description, price: $price, imageUrl: $imageUrl, categoryIds: $categoryIds, isAvailable: $isAvailable, optionGroups: $optionGroups)';
+    return 'Product(id: $id, restaurantId: $restaurantId, name: $name, description: $description, price: $price, imageUrl: $imageUrl, categoryIds: $categoryIds, categoryName: $categoryName, isAvailable: $isAvailable, optionGroups: $optionGroups)';
   }
 
   @override
@@ -306,6 +325,8 @@ class _$ProductImpl implements _Product {
               other._categoryIds,
               _categoryIds,
             ) &&
+            (identical(other.categoryName, categoryName) ||
+                other.categoryName == categoryName) &&
             (identical(other.isAvailable, isAvailable) ||
                 other.isAvailable == isAvailable) &&
             const DeepCollectionEquality().equals(
@@ -325,6 +346,7 @@ class _$ProductImpl implements _Product {
     price,
     imageUrl,
     const DeepCollectionEquality().hash(_categoryIds),
+    categoryName,
     isAvailable,
     const DeepCollectionEquality().hash(_optionGroups),
   );
@@ -352,6 +374,7 @@ abstract class _Product implements Product {
     required final Money price,
     final String? imageUrl,
     final List<String> categoryIds,
+    final String? categoryName,
     final bool isAvailable,
     final List<ProductOptionGroup> optionGroups,
   }) = _$ProductImpl;
@@ -372,6 +395,10 @@ abstract class _Product implements Product {
   String? get imageUrl;
   @override
   List<String> get categoryIds;
+
+  /// Primary category label from API (for menu tabs when ids are opaque).
+  @override
+  String? get categoryName;
   @override
   bool get isAvailable;
   @override

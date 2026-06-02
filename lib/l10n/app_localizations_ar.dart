@@ -168,6 +168,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homePromosSection => 'عروض وخصومات';
 
   @override
+  String get homeEmptyRestaurantsHint =>
+      'لا توجد مطاعم حالياً. تأكد أن الخادم يعمل ثم أعد المحاولة.';
+
+  @override
+  String get homeRetryRestaurants => 'إعادة المحاولة';
+
+  @override
   String get homeTabOrdersTitle => 'طلباتك';
 
   @override

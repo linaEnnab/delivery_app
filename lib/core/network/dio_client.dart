@@ -1,5 +1,6 @@
 import 'package:delivery_app/core/config/env/env_config.dart';
 import 'package:delivery_app/core/constants/api_constants.dart';
+import 'package:delivery_app/core/network/api_base_url.dart';
 import 'package:delivery_app/core/network/interceptors/auth_interceptor.dart';
 import 'package:delivery_app/core/network/interceptors/error_interceptor.dart';
 import 'package:delivery_app/core/network/interceptors/logging_interceptor.dart';
@@ -16,7 +17,7 @@ Dio createDioClient({
 }) {
   final dio = Dio(
     BaseOptions(
-      baseUrl: env.apiBaseUrl,
+      baseUrl: resolveApiBaseUrlForDevice(env.apiBaseUrl),
       connectTimeout: env.apiTimeout,
       receiveTimeout: env.apiTimeout,
       sendTimeout: env.apiTimeout,

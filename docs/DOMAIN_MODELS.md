@@ -74,7 +74,7 @@ Terminal: `cancelled`. Refunds are modeled via payments/wallet, not as `OrderSta
 
 ## API endpoint alignment
 
-`lib/core/network/api_endpoints.dart` — includes `loyaltyFreeDeliveryRewards`.
+Canonical HTTP paths for `Delivery.Api` live in `lib/core/constants/delivery_api_paths.dart` (`DeliveryApiPaths`). `lib/core/network/api_endpoints.dart` re-exports that library for convenience.
 
 ## Enum reference
 

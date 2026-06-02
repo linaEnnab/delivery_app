@@ -416,6 +416,18 @@ abstract class AppLocalizations {
   /// **'عروض وخصومات'**
   String get homePromosSection;
 
+  /// No description provided for @homeEmptyRestaurantsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مطاعم حالياً. تأكد أن الخادم يعمل ثم أعد المحاولة.'**
+  String get homeEmptyRestaurantsHint;
+
+  /// No description provided for @homeRetryRestaurants.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get homeRetryRestaurants;
+
   /// No description provided for @homeTabOrdersTitle.
   ///
   /// In ar, this message translates to:

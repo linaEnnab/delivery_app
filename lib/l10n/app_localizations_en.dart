@@ -170,6 +170,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homePromosSection => 'Offers & deals';
 
   @override
+  String get homeEmptyRestaurantsHint =>
+      'No restaurants are available yet. Check that the server is running and try again.';
+
+  @override
+  String get homeRetryRestaurants => 'Retry';
+
+  @override
   String get homeTabOrdersTitle => 'Your orders';
 
   @override

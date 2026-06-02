@@ -1,28 +1,30 @@
 import 'package:delivery_app/core/router/route_paths.dart';
 import 'package:delivery_app/core/theme/app_spacing.dart';
 import 'package:delivery_app/core/widgets/core_widgets.dart';
-import 'package:delivery_app/features/home/data/mock_home_feed_data.dart';
+import 'package:delivery_app/features/home/data/home_feed_static_data.dart';
+import 'package:delivery_app/features/restaurant/presentation/providers/restaurant_providers.dart';
 import 'package:delivery_app/l10n/app_localizations.dart';
+import 'package:delivery_app/shared/domain/entities/restaurant_summary.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// Marketplace home feed — mock data, RTL-first layout.
-class HomeFeedTab extends StatefulWidget {
+/// Marketplace home feed — restaurants from API, RTL-first layout.
+class HomeFeedTab extends ConsumerStatefulWidget {
   const HomeFeedTab({super.key});
 
   @override
-  State<HomeFeedTab> createState() => _HomeFeedTabState();
+  ConsumerState<HomeFeedTab> createState() => _HomeFeedTabState();
 }
 
-class _HomeFeedTabState extends State<HomeFeedTab> {
+class _HomeFeedTabState extends ConsumerState<HomeFeedTab> {
   int _selectedCategoryIndex = 0;
-
-  static const _currencyCode = 'JOD';
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final scheme = Theme.of(context).colorScheme;
+    final restaurantsAsync = ref.watch(restaurantsListProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -32,161 +34,221 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
         final promoWidth = (width * 0.86).clamp(280.0, 420.0);
         final compactCardWidth = (width * 0.46).clamp(168.0, 220.0);
 
-        return CustomScrollView(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxContent),
-                  child: Column(
-                    children: [
-                      _HomeHeroAkoolSection(
-                        inset: inset,
-                        scheme: scheme,
-                        l10n: l10n,
-                      ),
-                      // Space for search pill overlapping below the red header.
-                      SizedBox(height: AppSpacing.xl + 10),
-                    ],
-                  ),
-                ),
+        return restaurantsAsync.when(
+          data: (restaurants) {
+            final featured = _featuredSlice(restaurants);
+            return CustomScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxContent),
-                  child: SectionHeader(
-                    title: l10n.homePromosSection,
-                    actionLabel: l10n.homeViewAll,
-                    onActionTap: () {},
-                  ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxContent),
-                  child: SizedBox(
-                    height: 118,
-                    child: ListView.separated(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                        inset,
-                        0,
-                        inset,
-                        AppSpacing.md,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: MockHomeFeedData.promos.length,
-                      separatorBuilder: (context, _) =>
-                          SizedBox(width: AppSpacing.md),
-                      itemBuilder: (context, index) {
-                        final p = MockHomeFeedData.promos[index];
-                        return SizedBox(
-                          width: promoWidth,
-                          child: OfferBanner(
-                            title: p.title,
-                            subtitle: p.subtitle,
-                            leadingIcon: p.icon,
-                            onTap: () {},
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Align(
+                    alignment: AlignmentDirectional.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContent),
+                      child: Column(
+                        children: [
+                          _HomeHeroAkoolSection(
+                            inset: inset,
+                            scheme: scheme,
+                            l10n: l10n,
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxContent),
-                  child: SectionHeader(title: l10n.homeCategoriesSection),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxContent),
-                  child: SizedBox(
-                    height: 52,
-                    child: ListView.separated(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                        inset,
-                        0,
-                        inset,
-                        AppSpacing.md,
+                          SizedBox(height: AppSpacing.xl + 10),
+                        ],
                       ),
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: MockHomeFeedData.categories.length,
-                      separatorBuilder: (context, _) =>
-                          SizedBox(width: AppSpacing.sm),
-                      itemBuilder: (context, index) {
-                        final c = MockHomeFeedData.categories[index];
-                        return CategoryChip(
-                          label: c.label,
-                          selected: _selectedCategoryIndex == index,
-                          avatar: Icon(c.icon, size: AppSpacing.xl),
-                          onSelected: (_) {
-                            setState(() => _selectedCategoryIndex = index);
-                          },
-                        );
-                      },
                     ),
                   ),
                 ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxContent),
-                  child: SectionHeader(
-                    title: l10n.homeFeaturedSection,
-                    actionLabel: l10n.homeViewAll,
-                    onActionTap: () {},
+                SliverToBoxAdapter(
+                  child: Align(
+                    alignment: AlignmentDirectional.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContent),
+                      child: SectionHeader(
+                        title: l10n.homePromosSection,
+                        actionLabel: l10n.homeViewAll,
+                        onActionTap: () {},
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxContent),
-                  child: SizedBox(
-                    height: 278,
-                    child: ListView.separated(
+                SliverToBoxAdapter(
+                  child: Align(
+                    alignment: AlignmentDirectional.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContent),
+                      child: SizedBox(
+                        height: 118,
+                        child: ListView.separated(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                            inset,
+                            0,
+                            inset,
+                            AppSpacing.md,
+                          ),
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: HomeFeedStaticData.promos.length,
+                          separatorBuilder: (context, _) =>
+                              SizedBox(width: AppSpacing.md),
+                          itemBuilder: (context, index) {
+                            final p = HomeFeedStaticData.promos[index];
+                            return SizedBox(
+                              width: promoWidth,
+                              child: OfferBanner(
+                                title: p.title,
+                                subtitle: p.subtitle,
+                                leadingIcon: p.icon,
+                                onTap: () {},
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Align(
+                    alignment: AlignmentDirectional.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContent),
+                      child: SectionHeader(title: l10n.homeCategoriesSection),
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Align(
+                    alignment: AlignmentDirectional.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContent),
+                      child: SizedBox(
+                        height: 52,
+                        child: ListView.separated(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                            inset,
+                            0,
+                            inset,
+                            AppSpacing.md,
+                          ),
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: HomeFeedStaticData.categories.length,
+                          separatorBuilder: (context, _) =>
+                              SizedBox(width: AppSpacing.sm),
+                          itemBuilder: (context, index) {
+                            final c = HomeFeedStaticData.categories[index];
+                            return CategoryChip(
+                              label: c.label,
+                              selected: _selectedCategoryIndex == index,
+                              avatar: Icon(c.icon, size: AppSpacing.xl),
+                              onSelected: (_) {
+                                setState(() => _selectedCategoryIndex = index);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                if (featured.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: Align(
+                      alignment: AlignmentDirectional.topCenter,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxContent),
+                        child: SectionHeader(
+                          title: l10n.homeFeaturedSection,
+                          actionLabel: l10n.homeViewAll,
+                          onActionTap: () {},
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Align(
+                      alignment: AlignmentDirectional.topCenter,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxContent),
+                        child: SizedBox(
+                          height: 278,
+                          child: ListView.separated(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                              inset,
+                              0,
+                              inset,
+                              AppSpacing.lg,
+                            ),
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: featured.length,
+                            separatorBuilder: (context, _) =>
+                                SizedBox(width: AppSpacing.md),
+                            itemBuilder: (context, index) {
+                              final r = featured[index];
+                              return RestaurantCompactCard(
+                                restaurant: r,
+                                width: compactCardWidth,
+                                currencyCode: r.currencyCode,
+                                onTap: () => context.push(
+                                  RoutePaths.restaurantDetail(r.id),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+                SliverToBoxAdapter(
+                  child: Align(
+                    alignment: AlignmentDirectional.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxContent),
+                      child: SectionHeader(
+                        title: l10n.homeNearbySection,
+                        actionLabel: l10n.homeViewAll,
+                        onActionTap: () {},
+                      ),
+                    ),
+                  ),
+                ),
+                if (restaurants.isEmpty)
+                  SliverToBoxAdapter(
+                    child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(
-                        inset,
-                        0,
                         inset,
                         AppSpacing.lg,
+                        inset,
+                        AppSpacing.huge,
                       ),
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: MockHomeFeedData.featuredRestaurants.length,
+                      child: Text(
+                        l10n.homeEmptyRestaurantsHint,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  )
+                else
+                  SliverPadding(
+                    padding: EdgeInsetsDirectional.fromSTEB(
+                      inset,
+                      0,
+                      inset,
+                      AppSpacing.huge,
+                    ),
+                    sliver: SliverList.separated(
+                      itemCount: restaurants.length,
                       separatorBuilder: (context, _) =>
-                          SizedBox(width: AppSpacing.md),
+                          SizedBox(height: AppSpacing.md),
                       itemBuilder: (context, index) {
-                        final r = MockHomeFeedData.featuredRestaurants[index];
-                        return RestaurantCompactCard(
+                        final r = restaurants[index];
+                        return RestaurantCard(
                           restaurant: r,
-                          width: compactCardWidth,
-                          currencyCode: _currencyCode,
+                          currencyCode: r.currencyCode,
                           onTap: () => context.push(
                             RoutePaths.restaurantDetail(r.id),
                           ),
@@ -194,49 +256,40 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
                       },
                     ),
                   ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxContent),
-                  child: SectionHeader(
-                    title: l10n.homeNearbySection,
-                    actionLabel: l10n.homeViewAll,
-                    onActionTap: () {},
+              ],
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    e.toString(),
+                    textAlign: TextAlign.center,
                   ),
-                ),
+                  SizedBox(height: AppSpacing.md),
+                  FilledButton(
+                    onPressed: () =>
+                        ref.invalidate(restaurantsListProvider),
+                    child: Text(l10n.homeRetryRestaurants),
+                  ),
+                ],
               ),
             ),
-            SliverPadding(
-              padding: EdgeInsetsDirectional.fromSTEB(
-                inset,
-                0,
-                inset,
-                AppSpacing.huge,
-              ),
-              sliver: SliverList.separated(
-                itemCount: MockHomeFeedData.nearbyRestaurants.length,
-                separatorBuilder: (context, _) =>
-                    SizedBox(height: AppSpacing.md),
-                itemBuilder: (context, index) {
-                  final r = MockHomeFeedData.nearbyRestaurants[index];
-                  return RestaurantCard(
-                    restaurant: r,
-                    currencyCode: _currencyCode,
-                    onTap: () => context.push(
-                      RoutePaths.restaurantDetail(r.id),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+          ),
         );
       },
     );
+  }
+
+  /// First few venues for the horizontal carousel (same API list as below).
+  List<RestaurantSummary> _featuredSlice(List<RestaurantSummary> all) {
+    const maxFeatured = 4;
+    if (all.length <= maxFeatured) return all;
+    return all.sublist(0, maxFeatured);
   }
 }
 
@@ -259,8 +312,8 @@ class _HomeHeroAkoolSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final streetLine = Localizations.localeOf(context).languageCode == 'ar'
-        ? MockHomeFeedData.heroStreetLineAr
-        : MockHomeFeedData.heroStreetLineEn;
+        ? HomeFeedStaticData.heroStreetLineAr
+        : HomeFeedStaticData.heroStreetLineEn;
 
     return Stack(
       clipBehavior: Clip.none,

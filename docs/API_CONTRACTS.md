@@ -1,67 +1,108 @@
-# Customer API contracts (ASP.NET Core)
+# Delivery.Api HTTP contracts (customer app)
 
-Versioned REST under the app base URL (see `ApiEndpoints`). JSON uses **snake_case** keys to match generated Dart `@JsonEnum(fieldRename: FieldRename.snake)` models.
+Canonical route strings live in `lib/core/constants/delivery_api_paths.dart` (`DeliveryApiPaths`). Controllers are under `Delivery.Api/Controllers` in the backend repo.
 
-## Order lifecycle (`OrderStatus`)
+Unless noted, JSON uses **camelCase** property names (ASP.NET Core default). Enum values may serialize as **numbers** unless the API is configured with `JsonStringEnumConverter`—confirm in `Program.cs` / `Startup` when wiring clients.
 
-| Wire value | Meaning |
-|------------|---------|
-| `pending` | Created; payment / restaurant acceptance pending. |
-| `restaurant_accepted` | Restaurant accepted the order. |
-| `preparing` | Kitchen / prep in progress. |
-| `ready_for_pickup` | Ready for driver pickup at restaurant. |
-| `driver_assigned` | Driver assigned; may not yet be on site. |
-| `picked_up` | Driver collected the order from restaurant. |
-| `on_the_way` | En route to customer. |
-| `delivered` | Completed; reviews eligible. |
-| `cancelled` | Terminal cancel. |
+## Public catalog (anonymous)
 
-**Refunds** are not modeled as an order status. Use `PaymentSession` / `WalletTransaction` (and optional admin-only refund entities) so finance stays orthogonal to fulfillment.
+| Method | Path | Response |
+|--------|------|----------|
+| `GET` | `/api/restaurant` | `RestaurantListItemDto[]` |
+| `GET` | `/api/restaurant/{id}` | `RestaurantDetailDto` or `404` |
+| `GET` | `/api/restaurants/{restaurantId}/products` | `ProductDto[]` |
+| `GET` | `/api/categories/restaurant/{restaurantId}` | `CategoryDto[]` |
+| `GET` | `/api/Review/restaurant/{restaurantId}` | reviews payload from handler |
+| `GET` | `/api/Review/driver/{driverId}` | reviews payload from handler |
 
-## `GET /orders` and `GET /orders/{id}`
+### `RestaurantListItemDto`
 
-Order payload (customer-visible):
+`id`, `name`, `imageUrl`, `logoUrl`, `ratingAverage`, `reviewCount`, `cuisineType`, `deliveryFee`, `estimatedDeliveryMinutes`.
 
-- `restaurant` → `OrderRestaurantDetails`: `id`, `name`, `phone`, `address`, `coordinates` (`latitude`, `longitude`).
-- `customer_contact` (optional) → `CustomerDeliveryContact`: `name`, `phone` for the person receiving the delivery.
-- `delivery_address` → `DeliveryAddress` (includes `apartment`, `floor`, `delivery_instructions`, `location` coordinates, optional `is_delivery_point_confirmed`).
-- `driver` (optional) → `DriverSummary`: `id`, `name`, `phone`, `rating`, `vehicle_type` (`DriverVehicleType`).
-- `loyalty_points_earned` (optional int): points credited when the order completes (snapshot for receipts).
-- `pricing` → `OrderPricing` (see below).
+### `RestaurantDetailDto`
 
-## `GET /orders/{id}/tracking`
+Same core presentation fields as the list item, plus `description`, `phone`, `addressLine`.
 
-Returns `OrderTracking`: `current_status`, `timeline[]` (`status`, `timestamp`, `note`), optional `driver_location`, `estimated_minutes_remaining`.
+### `ProductDto`
 
-## Pricing snapshot (`OrderPricing`)
+`id`, `restaurantId`, `categoryId`, `name`, `description`, `price` (decimal), `imageUrl`, `displayOrder`, `isAvailable`, `isRewardEligible`, `rewardTag`.
 
-| Concept | JSON / model |
-|---------|----------------|
-| Subtotal | `subtotal` (`Money`) |
-| Delivery fee | `delivery_fee` |
-| Discount (non-coupon) | `discount_total` |
-| Coupon | `coupon_discount` |
-| Tax | `tax_amount` |
-| Final total | `grand_total` (alias getters: `finalTotal`, `orderSubtotal`, etc. on client) |
-| Platform commission | `commission.platform_commission` |
-| Driver earnings | `commission.driver_earnings` |
-| Restaurant earnings | `commission.restaurant_earnings` |
-| Delivery fee (split view) | `commission.delivery_fee` (mirrors customer line where applicable) |
+The Flutter client maps this to the in-app `Product` model and **sorts menu rows by `displayOrder`** after fetch so ordering matches the backend contract even if the server does not pre-sort.
 
-## Reviews
+## Authentication (`AuthenticationController`, anonymous)
 
-- `GET /orders/{orderId}/review-eligibility` → `ReviewEligibility`.
-- `POST /reviews` body: `OrderReviewSubmission` — `restaurant_rating`, `driver_rating`, `comment`, `review_images[]` where each image is `{ "id"?, "url", "sort_order" }`.
+| Method | Path | Body |
+|--------|------|------|
+| `POST` | `/api/Authentication/register` | `RegisterRequest` (`email`, `password`, `displayName`) |
+| `POST` | `/api/Authentication/login` | `LoginRequest` (`email`, `password`) |
 
-Persisted `Review` rows use `review_images` for the attachment list.
+## Orders (`OrderController`, `/api/Order`)
 
-## Loyalty
+| Method | Path | Auth | Notes |
+|--------|------|------|--------|
+| `POST` | `/api/Order` | Customer | Body: `CreateOrderRequest`. Success: `201` with `{ "orderId": "<guid>" }`. |
+| `GET` | `/api/Order/{id}` | Order participant | |
+| `GET` | `/api/Order/customer` | Customer | Optional query: `status` (`OrderStatus`). |
+| `PATCH` | `/api/Order/{id}/status` | Order status management | Body: `{ "newStatus": <OrderStatus> }`. |
 
-- `GET /loyalty/balance` → `LoyaltyBalance` (`points`, `lifetime_earned`, `lifetime_redeemed`, `pending_points`).
-- `GET /loyalty/history` → `LoyaltyTransaction[]` with `kind` (`LoyaltyTransactionKind`).
-- `GET /loyalty/free-delivery-rewards` → `FreeDeliveryReward[]`.
-- `POST /loyalty/spin-wheel` → `SpinWheelResult` (may include `loyalty_transaction_id`, nested `free_delivery_reward`).
+### `CreateOrderRequest`
+
+`restaurantId`, `deliveryAddressId`, `lineItems[]` (`productId`, `productNameSnapshot`, `quantity`, `unitPrice`), `deliveryFee`, `taxTotal`, `serviceFee`, optional `discountTotal`, optional `customerNotes`.
+
+## Reviews (`ReviewController`, `/api/Review`)
+
+| Method | Path | Auth |
+|--------|------|------|
+| `POST` | `/api/Review` | Customer | Body: `SubmitReviewRequest` — `orderId`, `targetType`, `rating`, optional `comment`, optional `images[]` (`imageUrl`, `sortOrder`). |
+
+## Rewards / loyalty (`RewardController`, `/api/Reward`)
+
+| Method | Path | Auth | Notes |
+|--------|------|------|--------|
+| `GET` | `/api/Reward/loyalty-balance` | Customer | `LoyaltySummaryDto`: `customerId`, `pointsBalance`, `recentTransactions`. |
+| `GET` | `/api/Reward/reward-history` | Customer | |
+| `POST` | `/api/Reward/spin-wheel` | Customer | Body: `{ "orderId": "<guid>" }` (`SpinWheelRequest`). |
+
+## Driver app (`DriverController`, `/api/driver`)
+
+All routes require the **Driver** policy. Verbs matter: accept/reject use **`POST`**; status transitions after assignment use **`PATCH`**.
+
+See `DeliveryApiPaths` entries `driverProfile`, `driverStatus`, `driverLocation`, `driverOrdersAvailable`, `driverOrdersAssigned`, and `driverOrderAccept` / `driverOrderReject` / `driverOrderPickedUp` / `driverOrderOnTheWay` / `driverOrderDelivered`.
+
+## Restaurant portal (`RestaurantOrdersController`, `RestaurantManagementController`)
+
+Under `/api/restaurant/orders` and `/api/restaurant/management`. Restaurant policy. Accept/reject order actions are **`POST`**; kitchen status is **`PATCH`**. See `DeliveryApiPaths.restaurantOrders*`.
+
+## Admin (`AdminController`, `/api/admin`)
+
+Admin JWT. `GET /api/admin/drivers` lists drivers; restaurant/category/product **creates** are `POST` on the collection path (there is **no** `GET /api/admin/restaurants` list in Delivery.Api—only create/update/delete on that segment).
+
+## Upload (`UploadController`, `/api/upload`)
+
+`POST /api/upload/image`, `multipart/form-data`, fields `file` and `folder` (allowed folder names enforced server-side).
+
+## System
+
+`GET /api/System/health` → `{ "status": "healthy" }`.
+
+---
+
+## `OrderStatus` (domain)
+
+Defined in `Delivery.Domain/Orders/Enums/OrderStatus.cs`. Unless `JsonStringEnumConverter` is enabled, JSON typically uses **numeric** values:
+
+| Value | Enum member |
+|------:|-------------|
+| 0 | `Pending` |
+| 1 | `RestaurantAccepted` |
+| 2 | `Preparing` |
+| 3 | `ReadyForPickup` |
+| 4 | `DriverAssigned` |
+| 5 | `PickedUp` |
+| 6 | `OnTheWay` |
+| 7 | `Delivered` |
+| 8 | `Cancelled` |
 
 ## Driver vehicle type (`DriverVehicleType`)
 
-`motorcycle`, `car`, `bicycle`, `scooter`, `walking`, `unknown`.
+`motorcycle`, `car`, `bicycle`, `scooter`, `walking`, `unknown` — used in driver-related DTOs when those endpoints are wired.

@@ -12,6 +12,13 @@ class RestaurantSummary with _$RestaurantSummary {
     required String id,
     required String name,
     required String imageUrl,
+    /// Square / circular logo for detail header; optional on list cards.
+    String? logoUrl,
+    @Default('') String description,
+    /// ISO-like currency code for formatting delivery fee / minimums.
+    @JsonKey(name: 'currency_code') @Default('JOD') String currencyCode,
+    /// Short line for hours / open state (from API or empty).
+    @JsonKey(name: 'opening_status_line') @Default('') String openingStatusLine,
     required double rating,
     required int reviewCount,
     required String cuisineTags,

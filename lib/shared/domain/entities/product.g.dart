@@ -19,6 +19,7 @@ _$ProductImpl _$$ProductImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      categoryName: json['category_name'] as String?,
       isAvailable: json['is_available'] as bool? ?? true,
       optionGroups:
           (json['option_groups'] as List<dynamic>?)
@@ -38,6 +39,7 @@ Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
       'price': instance.price.toJson(),
       if (instance.imageUrl case final value?) 'image_url': value,
       'category_ids': instance.categoryIds,
+      if (instance.categoryName case final value?) 'category_name': value,
       'is_available': instance.isAvailable,
       'option_groups': instance.optionGroups.map((e) => e.toJson()).toList(),
     };

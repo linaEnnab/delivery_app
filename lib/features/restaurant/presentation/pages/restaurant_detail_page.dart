@@ -8,16 +8,18 @@ import 'package:delivery_app/core/router/route_paths.dart';
 import 'package:delivery_app/features/cart/presentation/cart_feedback.dart';
 import 'package:delivery_app/features/cart/presentation/providers/cart_providers.dart';
 import 'package:delivery_app/features/cart/presentation/utils/cart_totals.dart';
-import 'package:delivery_app/features/restaurant/data/mock_restaurant_detail_data.dart';
+import 'package:delivery_app/features/restaurant/presentation/providers/restaurant_providers.dart';
+import 'package:delivery_app/features/restaurant/presentation/utils/menu_categories.dart';
 import 'package:delivery_app/l10n/app_localizations.dart';
 import 'package:delivery_app/shared/domain/entities/product.dart';
+import 'package:delivery_app/shared/domain/entities/restaurant_summary.dart';
 import 'package:delivery_app/shared/domain/value_objects/money.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// Restaurant menu screen — RTL / Arabic-first, Material 3, mock data only.
+/// Restaurant menu screen — RTL / Arabic-first, Material 3, API-backed menu.
 class RestaurantDetailPage extends ConsumerStatefulWidget {
   const RestaurantDetailPage({
     required this.restaurantId,
@@ -32,25 +34,23 @@ class RestaurantDetailPage extends ConsumerStatefulWidget {
 }
 
 class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
-  late String _selectedCategoryId;
-  late List<Product> _allProducts;
+  String _selectedCategoryId = 'all';
 
   @override
-  void initState() {
-    super.initState();
-    _selectedCategoryId = 'sandwiches';
-    _allProducts = MockRestaurantDetailData.products(widget.restaurantId);
+  void didUpdateWidget(covariant RestaurantDetailPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.restaurantId != widget.restaurantId) {
+      _selectedCategoryId = 'all';
+    }
   }
 
-  List<Product> get _visibleProducts {
-    if (_selectedCategoryId == 'all') return _allProducts;
-    return _allProducts
-        .where((p) => p.categoryIds.contains(_selectedCategoryId))
-        .toList();
+  List<Product> _visibleProducts(List<Product> all) {
+    if (_selectedCategoryId == 'all') return all;
+    return all.where((p) => p.categoryIds.contains(_selectedCategoryId)).toList();
   }
 
-  String _categoryTitleAr() {
-    for (final c in MockRestaurantDetailData.categories) {
+  String _categoryTitleAr(List<({String id, String labelAr})> categories) {
+    for (final c in categories) {
       if (c.id == _selectedCategoryId) return c.labelAr;
     }
     return 'المنتجات';
@@ -81,6 +81,103 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
     final unitCount =
         cart.items.fold<int>(0, (sum, item) => sum + item.quantity);
 
+    final restaurantAsync =
+        ref.watch(restaurantDetailProvider(widget.restaurantId));
+    final productsAsync =
+        ref.watch(restaurantProductsProvider(widget.restaurantId));
+
+    return restaurantAsync.when(
+      loading: () => Scaffold(
+        backgroundColor: scheme.surface,
+        body: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (e, _) => Scaffold(
+        backgroundColor: scheme.surface,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(e.toString(), textAlign: TextAlign.center),
+                SizedBox(height: AppSpacing.md),
+                FilledButton(
+                  onPressed: () {
+                    ref.invalidate(
+                      restaurantDetailProvider(widget.restaurantId),
+                    );
+                    ref.invalidate(
+                      restaurantProductsProvider(widget.restaurantId),
+                    );
+                  },
+                  child: Text(l10n.homeRetryRestaurants),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      data: (restaurant) => productsAsync.when(
+        loading: () => _restaurantScaffold(
+          context: context,
+          scheme: scheme,
+          semantics: semantics,
+          bottomInset: bottomInset,
+          l10n: l10n,
+          unitCount: unitCount,
+          totals: totals,
+          restaurant: restaurant,
+          categories: const [(id: 'all', labelAr: 'الكل')],
+          visibleProducts: const [],
+          menuLoading: true,
+        ),
+        error: (e, _) => _restaurantScaffold(
+          context: context,
+          scheme: scheme,
+          semantics: semantics,
+          bottomInset: bottomInset,
+          l10n: l10n,
+          unitCount: unitCount,
+          totals: totals,
+          restaurant: restaurant,
+          categories: const [(id: 'all', labelAr: 'الكل')],
+          visibleProducts: const [],
+          menuError: e.toString(),
+        ),
+        data: (products) {
+          final categories = menuCategoriesFromProducts(products);
+          final visible = _visibleProducts(products);
+          return _restaurantScaffold(
+            context: context,
+            scheme: scheme,
+            semantics: semantics,
+            bottomInset: bottomInset,
+            l10n: l10n,
+            unitCount: unitCount,
+            totals: totals,
+            restaurant: restaurant,
+            categories: categories,
+            visibleProducts: visible,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _restaurantScaffold({
+    required BuildContext context,
+    required ColorScheme scheme,
+    required MarketplaceSemantics semantics,
+    required double bottomInset,
+    required AppLocalizations l10n,
+    required int unitCount,
+    required CartTotals totals,
+    required RestaurantSummary restaurant,
+    required List<({String id, String labelAr})> categories,
+    required List<Product> visibleProducts,
+    bool menuLoading = false,
+    String? menuError,
+  }) {
     return Scaffold(
       backgroundColor: scheme.surface,
       body: Stack(
@@ -106,6 +203,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                           children: [
                             _RestaurantHeroHeader(
                               horizontalPadding: gutter,
+                              restaurant: restaurant,
                               onBack: () {
                                 if (context.canPop()) {
                                   context.pop();
@@ -121,58 +219,64 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                                 child: _RestaurantInfoCard(
                                   semantics: semantics,
                                   scheme: scheme,
+                                  restaurant: restaurant,
                                 ),
                               ),
                             ),
                             SizedBox(height: AppSpacing.md),
-                            Padding(
-                              padding: EdgeInsetsDirectional.symmetric(
-                                horizontal: gutter,
+                            if (restaurant.description.isNotEmpty)
+                              Padding(
+                                padding: EdgeInsetsDirectional.symmetric(
+                                  horizontal: gutter,
+                                ),
+                                child: Text(
+                                  restaurant.description,
+                                  textAlign: TextAlign.start,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ),
-                              child: Text(
-                                MockRestaurantDetailData.descriptionAr,
-                                textAlign: TextAlign.start,
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ),
-                            SizedBox(height: AppSpacing.sm),
-                            Padding(
-                              padding: EdgeInsetsDirectional.symmetric(
-                                horizontal: gutter,
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.schedule_rounded,
-                                    size: AppSpacing.xl,
-                                    color: scheme.primary,
-                                  ),
-                                  SizedBox(width: AppSpacing.sm),
-                                  Expanded(
-                                    child: Text(
-                                      MockRestaurantDetailData.openingStatusAr,
-                                      textAlign: TextAlign.start,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.copyWith(
-                                            color: scheme.onSurface,
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                            if (restaurant.description.isNotEmpty)
+                              SizedBox(height: AppSpacing.sm),
+                            if (restaurant.openingStatusLine.isNotEmpty) ...[
+                              Padding(
+                                padding: EdgeInsetsDirectional.symmetric(
+                                  horizontal: gutter,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.schedule_rounded,
+                                      size: AppSpacing.xl,
+                                      color: scheme.primary,
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(width: AppSpacing.sm),
+                                    Expanded(
+                                      child: Text(
+                                        restaurant.openingStatusLine,
+                                        textAlign: TextAlign.start,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(
+                                              color: scheme.onSurface,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: AppSpacing.lg),
-                            _CategoryTabBar(
-                              categories: MockRestaurantDetailData.categories,
-                              selectedId: _selectedCategoryId,
-                              scheme: scheme,
-                              onSelected: (id) =>
-                                  setState(() => _selectedCategoryId = id),
-                            ),
-                            SectionHeader(title: _categoryTitleAr()),
+                              SizedBox(height: AppSpacing.lg),
+                            ],
+                            if (categories.length > 1)
+                              _CategoryTabBar(
+                                categories: categories,
+                                selectedId: _selectedCategoryId,
+                                scheme: scheme,
+                                onSelected: (id) =>
+                                    setState(() => _selectedCategoryId = id),
+                              ),
+                            SectionHeader(title: _categoryTitleAr(categories)),
                           ],
                         ),
                       ),
@@ -180,30 +284,48 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   },
                 ),
               ),
-              SliverPadding(
-                padding: EdgeInsetsDirectional.only(
-                  start: AppSpacing.lg,
-                  end: AppSpacing.lg,
-                  bottom: AppSpacing.colossal + bottomInset,
-                ),
-                sliver: SliverList.separated(
-                  itemCount: _visibleProducts.length,
-                  separatorBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: AppSpacing.md,
-                    ),
-                    child: _DottedDivider(color: scheme.outlineVariant),
+              if (menuLoading)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.all(AppSpacing.xxl),
+                    child: Center(child: CircularProgressIndicator()),
                   ),
-                  itemBuilder: (context, index) {
-                    final p = _visibleProducts[index];
-                    return _MenuProductRow(
-                      product: p,
-                      scheme: scheme,
-                      onAdd: () => _onAdd(p),
-                    );
-                  },
+                )
+              else if (menuError != null)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: Text(
+                      menuError,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              else
+                SliverPadding(
+                  padding: EdgeInsetsDirectional.only(
+                    start: AppSpacing.lg,
+                    end: AppSpacing.lg,
+                    bottom: AppSpacing.colossal + bottomInset,
+                  ),
+                  sliver: SliverList.separated(
+                    itemCount: visibleProducts.length,
+                    separatorBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.md,
+                      ),
+                      child: _DottedDivider(color: scheme.outlineVariant),
+                    ),
+                    itemBuilder: (context, index) {
+                      final p = visibleProducts[index];
+                      return _MenuProductRow(
+                        product: p,
+                        scheme: scheme,
+                        onAdd: () => _onAdd(p),
+                      );
+                    },
+                  ),
                 ),
-              ),
             ],
           ),
           PositionedDirectional(
@@ -223,15 +345,32 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
       ),
     );
   }
+
+  static String deliveryTimeRange(RestaurantSummary r) {
+    final max = r.estimatedDeliveryMinutesMax;
+    if (max == null || max <= r.estimatedDeliveryMinutes) {
+      return '${r.estimatedDeliveryMinutes}';
+    }
+    return '${r.estimatedDeliveryMinutes}-$max';
+  }
+
+  static Money deliveryFeeMoney(RestaurantSummary r) {
+    return Money(
+      amount: r.deliveryFeeAmount,
+      currencyCode: r.currencyCode,
+    );
+  }
 }
 
 class _RestaurantHeroHeader extends StatelessWidget {
   const _RestaurantHeroHeader({
     required this.horizontalPadding,
+    required this.restaurant,
     required this.onBack,
   });
 
   final double horizontalPadding;
+  final RestaurantSummary restaurant;
   final VoidCallback onBack;
 
   static const double _coverHeight = 228;
@@ -256,8 +395,8 @@ class _RestaurantHeroHeader extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.asset(
-                  MockRestaurantDetailData.coverAsset,
+                Image.network(
+                  restaurant.imageUrl,
                   fit: BoxFit.cover,
                   alignment: Alignment.center,
                   errorBuilder: (_, _, _) => ColoredBox(
@@ -325,7 +464,12 @@ class _RestaurantHeroHeader extends StatelessWidget {
           ),
           Positioned(
             bottom: 0,
-            child: _RestaurantLogoBadge(diameter: _logoSize, scheme: scheme),
+            child: _RestaurantLogoBadge(
+              diameter: _logoSize,
+              scheme: scheme,
+              imageUrl: restaurant.logoUrl,
+              name: restaurant.name,
+            ),
           ),
         ],
       ),
@@ -370,14 +514,19 @@ class _RestaurantLogoBadge extends StatelessWidget {
   const _RestaurantLogoBadge({
     required this.diameter,
     required this.scheme,
+    required this.imageUrl,
+    required this.name,
   });
 
   final double diameter;
   final ColorScheme scheme;
+  final String? imageUrl;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final url = imageUrl;
 
     return Container(
       width: diameter,
@@ -395,42 +544,88 @@ class _RestaurantLogoBadge extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.sm),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.restaurant_menu_rounded,
-              color: scheme.primary,
-              size: diameter * 0.28,
-            ),
-            SizedBox(height: AppSpacing.xxs),
-            Text(
-              'Malaky',
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: textTheme.labelSmall?.copyWith(
-                color: const Color(0xFF1565C0),
-                fontWeight: FontWeight.w800,
-                height: 1,
-                fontSize: 10,
+        child: url != null && url.isNotEmpty
+            ? ClipOval(
+                child: Image.network(
+                  url,
+                  fit: BoxFit.cover,
+                  width: diameter - AppSpacing.sm * 2,
+                  height: diameter - AppSpacing.sm * 2,
+                  errorBuilder: (_, _, _) => _LogoFallback(
+                    diameter: diameter,
+                    scheme: scheme,
+                    textTheme: textTheme,
+                    name: name,
+                  ),
+                ),
+              )
+            : _LogoFallback(
+                diameter: diameter,
+                scheme: scheme,
+                textTheme: textTheme,
+                name: name,
               ),
-            ),
-            Text(
-              'BROAST',
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              style: textTheme.labelSmall?.copyWith(
-                color: scheme.primary,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 0.5,
-                height: 1,
-                fontSize: 9,
-              ),
-            ),
-          ],
-        ),
       ),
+    );
+  }
+}
+
+class _LogoFallback extends StatelessWidget {
+  const _LogoFallback({
+    required this.diameter,
+    required this.scheme,
+    required this.textTheme,
+    required this.name,
+  });
+
+  final double diameter;
+  final ColorScheme scheme;
+  final TextTheme textTheme;
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    final words = name.trim().split(RegExp(r'\s+'));
+    final line1 = words.isNotEmpty ? words.first : '';
+    final line2 = words.length > 1 ? words.sublist(1).join(' ') : '';
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.restaurant_menu_rounded,
+          color: scheme.primary,
+          size: diameter * 0.28,
+        ),
+        SizedBox(height: AppSpacing.xxs),
+        if (line1.isNotEmpty)
+          Text(
+            line1,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.labelSmall?.copyWith(
+              color: const Color(0xFF1565C0),
+              fontWeight: FontWeight.w800,
+              height: 1,
+              fontSize: 10,
+            ),
+          ),
+        if (line2.isNotEmpty)
+          Text(
+            line2,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.labelSmall?.copyWith(
+              color: scheme.primary,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+              height: 1,
+              fontSize: 9,
+            ),
+          ),
+      ],
     );
   }
 }
@@ -439,10 +634,12 @@ class _RestaurantInfoCard extends StatelessWidget {
   const _RestaurantInfoCard({
     required this.semantics,
     required this.scheme,
+    required this.restaurant,
   });
 
   final MarketplaceSemantics semantics;
   final ColorScheme scheme;
+  final RestaurantSummary restaurant;
 
   String _money(BuildContext context, Money m) {
     return formatMoneyForLocale(context, m);
@@ -478,7 +675,7 @@ class _RestaurantInfoCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    MockRestaurantDetailData.nameAr,
+                    restaurant.name,
                     textAlign: TextAlign.start,
                     style: textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w800,
@@ -503,7 +700,7 @@ class _RestaurantInfoCard extends StatelessWidget {
             ),
             SizedBox(height: AppSpacing.xs),
             Text(
-              MockRestaurantDetailData.tagsAr,
+              restaurant.cuisineTags,
               textAlign: TextAlign.start,
               style: textTheme.bodyMedium?.copyWith(
                 color: scheme.onSurfaceVariant,
@@ -529,14 +726,14 @@ class _RestaurantInfoCard extends StatelessWidget {
                         ),
                         SizedBox(width: AppSpacing.xs),
                         Text(
-                          '${MockRestaurantDetailData.rating}',
+                          '${restaurant.rating}',
                           style: textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                         SizedBox(width: AppSpacing.xxs),
                         Text(
-                          MockRestaurantDetailData.ratingCountLabel,
+                          '(${restaurant.reviewCount})',
                           style: textTheme.bodySmall?.copyWith(
                             color: scheme.onSurfaceVariant,
                           ),
@@ -551,7 +748,9 @@ class _RestaurantInfoCard extends StatelessWidget {
                     label: 'دقيقة',
                     scheme: scheme,
                     child: Text(
-                      MockRestaurantDetailData.deliveryTimeRange,
+                      _RestaurantDetailPageState.deliveryTimeRange(
+                        restaurant,
+                      ),
                       textAlign: TextAlign.center,
                       style: textTheme.titleLarge?.copyWith(
                         color: scheme.primary,
@@ -566,7 +765,12 @@ class _RestaurantInfoCard extends StatelessWidget {
                     label: 'رسوم التوصيل',
                     scheme: scheme,
                     child: Text(
-                      _money(context, MockRestaurantDetailData.deliveryFee),
+                      _money(
+                        context,
+                        _RestaurantDetailPageState.deliveryFeeMoney(
+                          restaurant,
+                        ),
+                      ),
                       textAlign: TextAlign.center,
                       style: textTheme.titleMedium?.copyWith(
                         color: scheme.primary,

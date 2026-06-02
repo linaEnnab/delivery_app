@@ -53,6 +53,8 @@
   "homeViewAll": "View all",
   "homeCategoriesSection": "Categories",
   "homePromosSection": "Offers & deals",
+  "homeEmptyRestaurantsHint": "No restaurants are available yet. Check that the server is running and try again.",
+  "homeRetryRestaurants": "Retry",
   "homeTabOrdersTitle": "Your orders",
   "homeTabOrdersSubtitle": "Your orders will appear here soon.",
   "homeTabRewardsTitle": "Rewards",
