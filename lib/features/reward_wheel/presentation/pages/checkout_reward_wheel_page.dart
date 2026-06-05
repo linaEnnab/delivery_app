@@ -99,11 +99,24 @@ class _CheckoutRewardWheelPageState extends ConsumerState<CheckoutRewardWheelPag
     final restaurantId = cart.restaurantId;
 
     if (kind.addsFreeProductToCart && restaurantId.isNotEmpty) {
+      final currencyCode = cart.items.isNotEmpty
+          ? cart.items.first.unitPrice.currencyCode
+          : 'JOD';
       final notifier = ref.read(cartNotifierProvider.notifier);
       if (kind == WheelRewardKind.freeCola) {
-        notifier.addProduct(WheelGiftProducts.freeCola(restaurantId));
+        notifier.addProduct(
+          WheelGiftProducts.freeCola(
+            restaurantId,
+            currencyCode: currencyCode,
+          ),
+        );
       } else if (kind == WheelRewardKind.freeFries) {
-        notifier.addProduct(WheelGiftProducts.freeFries(restaurantId));
+        notifier.addProduct(
+          WheelGiftProducts.freeFries(
+            restaurantId,
+            currencyCode: currencyCode,
+          ),
+        );
       }
     }
 

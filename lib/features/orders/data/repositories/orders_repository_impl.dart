@@ -1,33 +1,36 @@
-// ignore_for_file: unused_field
-import 'package:delivery_app/core/errors/failures.dart';
-import 'package:delivery_app/core/network/network_info.dart';
 import 'package:delivery_app/core/utils/result.dart';
 import 'package:delivery_app/features/orders/data/datasources/orders_remote_datasource.dart';
+import 'package:delivery_app/features/orders/domain/customer_order.dart';
 import 'package:delivery_app/features/orders/domain/repositories/orders_repository.dart';
-import 'package:delivery_app/shared/domain/entities/order.dart';
-import 'package:delivery_app/shared/domain/entities/pagination.dart';
-import 'package:fpdart/fpdart.dart' hide Order;
+import 'package:delivery_app/features/restaurant/data/utils/dio_failure_mapper.dart';
+import 'package:fpdart/fpdart.dart';
 
 class OrdersRepositoryImpl implements OrdersRepository {
   OrdersRepositoryImpl({
     required OrdersRemoteDataSource remoteDataSource,
-    required NetworkInfo networkInfo,
-  })  : _remote = remoteDataSource,
-        _networkInfo = networkInfo;
+  }) : _remote = remoteDataSource;
 
   final OrdersRemoteDataSource _remote;
-  final NetworkInfo _networkInfo;
 
   @override
-  Future<Result<PaginatedResult<Order>>> listOrders({
-    int page = 1,
-    int pageSize = 20,
+  Future<Result<List<CustomerOrder>>> listCustomerOrders({
+    OrderStatus? statusFilter,
   }) async {
-    return const Left(Failure.unexpected(message: 'Not implemented'));
+    try {
+      final list = await _remote.fetchCustomerOrders(statusFilter: statusFilter);
+      return Right(list);
+    } catch (e) {
+      return Left(mapDioToFailure(e));
+    }
   }
 
   @override
-  Future<Result<Order>> getOrder(String orderId) async {
-    return const Left(Failure.unexpected(message: 'Not implemented'));
+  Future<Result<CustomerOrder>> getCustomerOrder(String orderId) async {
+    try {
+      final order = await _remote.fetchOrderById(orderId);
+      return Right(order);
+    } catch (e) {
+      return Left(mapDioToFailure(e));
+    }
   }
 }

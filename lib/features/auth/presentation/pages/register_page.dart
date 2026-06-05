@@ -114,7 +114,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 textInputAction: TextInputAction.next,
                 autocorrect: false,
                 autofillHints: const [AutofillHints.email],
-                validator: (v) => AuthValidators.emailOptional(l10n, v),
+                validator: (v) => AuthValidators.emailRequired(l10n, v),
               ),
               SizedBox(height: AppSpacing.lg),
               AuthPasswordField(
@@ -151,11 +151,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         if (!(_formKey.currentState?.validate() ?? false)) {
                           return;
                         }
-                        final email = _emailController.text.trim();
                         await ref.read(registerControllerProvider.notifier).submit(
                               fullName: _nameController.text.trim(),
                               phone: _phoneController.text.trim(),
-                              email: email.isEmpty ? null : email,
+                              email: _emailController.text.trim(),
                               password: _passwordController.text,
                             );
                       },

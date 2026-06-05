@@ -3,26 +3,22 @@ import 'package:delivery_app/core/theme/app_radius.dart';
 import 'package:delivery_app/core/theme/app_spacing.dart';
 import 'package:delivery_app/core/theme/app_theme.dart';
 import 'package:delivery_app/core/widgets/core_widgets.dart';
-import 'package:delivery_app/features/checkout/data/mock_order_success_data.dart';
+import 'package:delivery_app/features/checkout/presentation/providers/placed_order_provider.dart';
 import 'package:delivery_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// Full-screen confirmation after placing an order — RTL-first, design tokens.
-class OrderSuccessPage extends StatefulWidget {
-  const OrderSuccessPage({
-    super.key,
-    this.confirmation = kMockOrderConfirmation,
-  });
-
-  final MockOrderConfirmation confirmation;
+class OrderSuccessPage extends ConsumerStatefulWidget {
+  const OrderSuccessPage({super.key});
 
   @override
-  State<OrderSuccessPage> createState() => _OrderSuccessPageState();
+  ConsumerState<OrderSuccessPage> createState() => _OrderSuccessPageState();
 }
 
-class _OrderSuccessPageState extends State<OrderSuccessPage>
+class _OrderSuccessPageState extends ConsumerState<OrderSuccessPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _celebrate;
   late final Animation<double> _scale;
@@ -62,18 +58,27 @@ class _OrderSuccessPageState extends State<OrderSuccessPage>
     context.go(RoutePaths.home);
   }
 
-  void _trackOrder(BuildContext context) {
+  void _trackOrder(BuildContext context, String orderId) {
     HapticFeedback.selectionClick();
-    context.push(RoutePaths.orderTracking(widget.confirmation.orderId));
+    context.push(RoutePaths.orderTracking(orderId));
   }
 
   @override
   Widget build(BuildContext context) {
+    final confirmation = ref.watch(placedOrderProvider);
     final l10n = AppLocalizations.of(context);
+
+    if (confirmation == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) context.go(RoutePaths.home);
+      });
+      return const Scaffold(body: SizedBox.shrink());
+    }
+
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final semantics = Theme.of(context).extension<MarketplaceSemantics>()!;
-    final c = widget.confirmation;
+    final c = confirmation;
     final bottom = MediaQuery.paddingOf(context).bottom;
 
     return PopScope(
@@ -154,7 +159,7 @@ class _OrderSuccessPageState extends State<OrderSuccessPage>
                         PrimaryButton(
                           label: l10n.orderSuccessTrackOrder,
                           leading: const Icon(Icons.map_outlined, size: 22),
-                          onPressed: () => _trackOrder(context),
+                          onPressed: () => _trackOrder(context, c.orderId),
                         ),
                         SizedBox(height: AppSpacing.md),
                         SecondaryButton(

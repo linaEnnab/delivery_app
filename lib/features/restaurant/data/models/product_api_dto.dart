@@ -2,7 +2,7 @@ import 'package:delivery_app/features/restaurant/data/utils/api_json_read.dart';
 import 'package:delivery_app/shared/domain/entities/product.dart';
 import 'package:delivery_app/shared/domain/value_objects/money.dart';
 
-/// Parses [ProductDto] items from `GET /api/restaurants/{restaurantId}/products`.
+/// Parses [ProductDto] items from `GET /api/restaurant/{restaurantId}/products`.
 final class ProductApiDto {
   ProductApiDto._(this._json);
 

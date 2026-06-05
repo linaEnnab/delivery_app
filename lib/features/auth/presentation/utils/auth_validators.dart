@@ -38,8 +38,18 @@ abstract final class AuthValidators {
   static String? emailOptional(AppLocalizations l10n, String? value) {
     final t = value?.trim() ?? '';
     if (t.isEmpty) return null;
+    return _emailFormat(l10n, t);
+  }
+
+  static String? emailRequired(AppLocalizations l10n, String? value) {
+    final t = value?.trim() ?? '';
+    if (t.isEmpty) return l10n.authEmailRequired;
+    return _emailFormat(l10n, t);
+  }
+
+  static String? _emailFormat(AppLocalizations l10n, String value) {
     final email = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
-    if (!email.hasMatch(t)) return l10n.authEmailInvalid;
+    if (!email.hasMatch(value)) return l10n.authEmailInvalid;
     return null;
   }
 }

@@ -9,23 +9,25 @@ abstract final class WheelGiftProductIds {
 
 /// Mock catalog items added to the cart when the user claims a food reward.
 abstract final class WheelGiftProducts {
-  static Product freeCola(String restaurantId) => Product(
+  static Product freeCola(String restaurantId, {required String currencyCode}) =>
+      Product(
         id: WheelGiftProductIds.cola,
         restaurantId: restaurantId,
         name: 'كولا',
         description: 'مشروب غازي — مكافأة العجلة (عرض تجريبي)',
-        price: const Money(amount: 0, currencyCode: 'ILS'),
+        price: Money(amount: 0, currencyCode: currencyCode),
         imageUrl:
             'https://images.unsplash.com/photo-1622483767028-3f66f7a5d9a4?w=400&q=80',
         categoryIds: const ['drinks'],
       );
 
-  static Product freeFries(String restaurantId) => Product(
+  static Product freeFries(String restaurantId, {required String currencyCode}) =>
+      Product(
         id: WheelGiftProductIds.fries,
         restaurantId: restaurantId,
         name: 'بطاطا مقلية',
         description: 'بطاطا مقرمشة — مكافأة العجلة (عرض تجريبي)',
-        price: const Money(amount: 0, currencyCode: 'ILS'),
+        price: Money(amount: 0, currencyCode: currencyCode),
         imageUrl:
             'https://images.unsplash.com/photo-1573080496219-bb080dd4d13c?w=400&q=80',
         categoryIds: const ['fries'],

@@ -7,7 +7,7 @@ import 'package:delivery_app/features/checkout/presentation/pages/order_success_
 import 'package:delivery_app/features/reward_wheel/presentation/pages/checkout_reward_wheel_page.dart';
 import 'package:go_router/go_router.dart';
 
-/// Checkout route (mock address, payment, totals — no backend).
+/// Checkout route (address, payment, totals, and order submission).
 abstract final class CheckoutRoute {
   static GoRoute get goRoute => GoRoute(
         path: RoutePaths.checkout,

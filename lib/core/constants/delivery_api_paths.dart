@@ -16,9 +16,9 @@ abstract final class DeliveryApiPaths {
 
   static String restaurantById(String id) => '/api/restaurant/$id';
 
-  // --- ProductController: catalog under `RestaurantsController`-style segment ---
+  // --- ProductController: [Route("api/restaurant")] ---
   static String restaurantProducts(String restaurantId) =>
-      '/api/restaurants/$restaurantId/products';
+      '/api/restaurant/$restaurantId/products';
 
   // --- CategoryController: [Route("api/categories")] ---
   static String categoriesForRestaurant(String restaurantId) =>

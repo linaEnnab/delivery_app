@@ -54,7 +54,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authFullNameHint => 'مثال: أحمد محمد';
 
   @override
-  String get authEmailLabel => 'البريد الإلكتروني (اختياري)';
+  String get authEmailLabel => 'البريد الإلكتروني';
 
   @override
   String get authEmailHint => 'you@example.com';
@@ -109,6 +109,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authEmailInvalid => 'البريد الإلكتروني غير صالح';
+
+  @override
+  String get authEmailRequired => 'يرجى إدخال بريدك الإلكتروني';
 
   @override
   String get authLoginFailed => 'تعذر تسجيل الدخول. حاول مرة أخرى.';
@@ -335,6 +338,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get checkoutPlaceOrderDemo => 'تم استلام طلبك (تجريبي)';
+
+  @override
+  String get checkoutPlaceOrderFailed => 'تعذّر إتمام الطلب. حاول مرة أخرى.';
 
   @override
   String get checkoutEmptyCartTitle => 'السلة فارغة';

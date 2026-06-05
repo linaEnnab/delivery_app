@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:delivery_app/core/errors/failures.dart';
 import 'package:delivery_app/core/router/app_router.dart';
 import 'package:delivery_app/features/auth/presentation/mock/mock_auth_repository.dart';
+import 'package:delivery_app/features/auth/presentation/providers/auth_providers.dart';
+import 'package:delivery_app/features/auth/presentation/providers/auth_session_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final loginControllerProvider =
@@ -14,15 +17,19 @@ class LoginController extends AutoDisposeAsyncNotifier<void> {
   FutureOr<void> build() {}
 
   Future<void> submit({
-    required String phone,
+    required String email,
     required String password,
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await ref.read(mockAuthRepositoryProvider).login(
-            phone: phone,
+      final result = await ref.read(authRepositoryProvider).login(
+            email: email,
             password: password,
           );
+      result.fold(
+        (failure) => throw _failureToException(failure),
+        (_) => ref.read(authSessionNotifierProvider.notifier).setSignedIn(true),
+      );
     });
     if (!state.hasError) {
       ref.read(goRouterProvider).refresh();
@@ -42,17 +49,21 @@ class RegisterController extends AutoDisposeAsyncNotifier<void> {
   Future<void> submit({
     required String fullName,
     required String phone,
-    String? email,
+    required String email,
     required String password,
   }) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await ref.read(mockAuthRepositoryProvider).register(
+      final result = await ref.read(authRepositoryProvider).register(
             fullName: fullName,
-            phone: phone,
             email: email,
+            phone: phone,
             password: password,
           );
+      result.fold(
+        (failure) => throw _failureToException(failure),
+        (_) => ref.read(authSessionNotifierProvider.notifier).setSignedIn(true),
+      );
     });
     if (!state.hasError) {
       ref.read(goRouterProvider).refresh();
@@ -77,4 +88,17 @@ class ForgotPasswordController extends AutoDisposeAsyncNotifier<void> {
           );
     });
   }
+}
+
+Exception _failureToException(Failure failure) {
+  return failure.when(
+    network: (message) => Exception(message),
+    auth: (message) => Exception(message),
+    validation: (message, fieldErrors) => Exception(message),
+    notFound: (message) => Exception(message),
+    businessRule: (message) => Exception(message),
+    server: (message, code, statusCode) => Exception(message),
+    cache: (message) => Exception(message),
+    unexpected: (message) => Exception(message),
+  );
 }

@@ -6,7 +6,11 @@ import 'package:delivery_app/features/cart/presentation/utils/cart_totals.dart';
 import 'package:delivery_app/core/router/route_names.dart';
 import 'package:delivery_app/features/checkout/presentation/models/delivery_address_editor_mode.dart';
 import 'package:delivery_app/features/checkout/presentation/providers/checkout_delivery_address_provider.dart';
+import 'package:delivery_app/features/checkout/presentation/providers/checkout_flow_controllers.dart';
+import 'package:delivery_app/features/reward_wheel/domain/wheel_reward_kind.dart';
 import 'package:delivery_app/features/reward_wheel/domain/wheel_reward_kind_helpers.dart';
+import 'package:delivery_app/shared/domain/entities/cart.dart';
+import 'package:delivery_app/shared/domain/entities/delivery_address.dart';
 import 'package:delivery_app/features/reward_wheel/presentation/providers/pre_order_wheel_provider.dart';
 import 'package:delivery_app/features/reward_wheel/presentation/utils/wheel_reward_prize_localizations.dart';
 import 'package:delivery_app/features/reward_wheel/presentation/widgets/wheel_reward_asset_image.dart';
@@ -18,7 +22,7 @@ import 'package:go_router/go_router.dart';
 
 enum _CheckoutPaymentMethod { cashOnDelivery, card }
 
-/// Checkout — mock address, totals from local cart, no backend.
+/// Checkout — local address and cart totals; order submission via [POST /api/Order].
 class CheckoutPage extends ConsumerStatefulWidget {
   const CheckoutPage({super.key});
 
@@ -41,6 +45,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
       appliedCheckoutReward: claimed,
     );
     final address = ref.watch(checkoutDeliveryAddressProvider);
+    final placeOrderAsync = ref.watch(placeOrderControllerProvider);
     final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     if (cart.items.isEmpty) {
@@ -405,33 +410,80 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
               width: double.infinity,
               height: AppSpacing.minTapTarget,
               child: FilledButton(
-                onPressed: () {
-                  HapticFeedback.mediumImpact();
-                  if (claimed != null) {
-                    ref.read(preOrderWheelProvider.notifier).clear();
-                    ref.read(cartNotifierProvider.notifier).clear();
-                    context.pushReplacementNamed(
-                      RouteNames.checkoutOrderSuccess,
-                    );
-                  } else {
-                    context.pushNamed(RouteNames.checkoutRewardWheel);
-                  }
-                },
-                child: Text(
-                  claimed != null
-                      ? l10n.checkoutSubmitOrder
-                      : l10n.checkoutPlaceOrder,
-                  style: textTheme.titleMedium?.copyWith(
-                    color: scheme.onPrimary,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
+                onPressed: placeOrderAsync.isLoading
+                    ? null
+                    : () => _onCheckoutPrimaryAction(
+                          context,
+                          claimed: claimed,
+                          cart: cart,
+                          address: address,
+                          totals: totals,
+                        ),
+                child: placeOrderAsync.isLoading
+                    ? SizedBox(
+                        width: AppSpacing.xxl,
+                        height: AppSpacing.xxl,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: scheme.onPrimary,
+                        ),
+                      )
+                    : Text(
+                        claimed != null
+                            ? l10n.checkoutSubmitOrder
+                            : l10n.checkoutPlaceOrder,
+                        style: textTheme.titleMedium?.copyWith(
+                          color: scheme.onPrimary,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
               ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _onCheckoutPrimaryAction(
+    BuildContext context, {
+    required WheelRewardKind? claimed,
+    required Cart cart,
+    required DeliveryAddress address,
+    required CartTotals totals,
+  }) async {
+    HapticFeedback.mediumImpact();
+
+    if (claimed == null) {
+      context.pushNamed(RouteNames.checkoutRewardWheel);
+      return;
+    }
+
+    await ref.read(placeOrderControllerProvider.notifier).submit(
+          cart: cart,
+          address: address,
+          totals: totals,
+        );
+
+    if (!context.mounted) return;
+
+    final error = ref.read(placeOrderControllerProvider).error;
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            error.toString().replaceFirst('Exception: ', '').trim().isEmpty
+                ? AppLocalizations.of(context).checkoutPlaceOrderFailed
+                : error.toString().replaceFirst('Exception: ', ''),
+          ),
+        ),
+      );
+      return;
+    }
+
+    ref.read(preOrderWheelProvider.notifier).clear();
+    ref.read(cartNotifierProvider.notifier).clear();
+    context.pushReplacementNamed(RouteNames.checkoutOrderSuccess);
   }
 }
 

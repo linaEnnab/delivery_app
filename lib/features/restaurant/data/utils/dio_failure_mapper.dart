@@ -67,14 +67,33 @@ Failure _failureFromBadResponse(DioException err) {
     return Failure.server(message: message, statusCode: null);
   }
 
+  final fieldErrors = _fieldErrorsFromBody(err.response?.data);
+
   return switch (status) {
     401 => Failure.auth(message: message),
     404 => Failure.notFound(message: message),
     422 => Failure.validation(
         message: message,
-        fieldErrors: _fieldErrorsFromBody(err.response?.data),
+        fieldErrors: fieldErrors,
+      ),
+    400 when fieldErrors != null && fieldErrors.isNotEmpty => Failure.validation(
+        message: _validationMessage(message, fieldErrors),
+        fieldErrors: fieldErrors,
       ),
     >= 400 && < 500 => Failure.businessRule(message: message),
     _ => Failure.server(message: message, statusCode: status),
   };
+}
+
+String _validationMessage(
+  String fallback,
+  Map<String, List<String>> fieldErrors,
+) {
+  final details = fieldErrors.values
+      .expand((messages) => messages)
+      .map((m) => m.trim())
+      .where((m) => m.isNotEmpty)
+      .toList();
+  if (details.isEmpty) return fallback;
+  return details.join('\n');
 }

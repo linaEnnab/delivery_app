@@ -47,12 +47,19 @@ class ErrorInterceptor extends Interceptor {
       return ServerException(message, statusCode: status);
     }
 
+    final fieldErrors = _fieldErrors(err.response?.data);
+
     return switch (status) {
       401 => AuthException(message),
       404 => NotFoundException(message),
       422 => ValidationException(
           message,
-          fieldErrors: _fieldErrors(err.response?.data),
+          fieldErrors: fieldErrors,
+        ),
+      400 when fieldErrors != null && fieldErrors.isNotEmpty =>
+        ValidationException(
+          _validationMessage(message, fieldErrors),
+          fieldErrors: fieldErrors,
         ),
       >= 400 && < 500 => BusinessRuleException(message),
       _ => ServerException(message, statusCode: status),
@@ -77,5 +84,18 @@ class ErrorInterceptor extends Interceptor {
         (value as List<dynamic>).map((e) => e.toString()).toList(),
       ),
     );
+  }
+
+  String _validationMessage(
+    String fallback,
+    Map<String, List<String>> fieldErrors,
+  ) {
+    final details = fieldErrors.values
+        .expand((messages) => messages)
+        .map((m) => m.trim())
+        .where((m) => m.isNotEmpty)
+        .toList();
+    if (details.isEmpty) return fallback;
+    return details.join('\n');
   }
 }

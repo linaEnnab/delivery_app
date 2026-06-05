@@ -1,17 +1,18 @@
+import 'package:delivery_app/core/errors/exceptions.dart';
 import 'package:delivery_app/core/router/route_paths.dart';
 import 'package:delivery_app/core/theme/app_radius.dart';
 import 'package:delivery_app/core/theme/app_spacing.dart';
-import 'package:delivery_app/features/orders/data/mock_my_orders_data.dart';
 import 'package:delivery_app/features/orders/domain/customer_order.dart';
 import 'package:delivery_app/features/orders/presentation/providers/order_review_submission_provider.dart';
+import 'package:delivery_app/features/orders/presentation/providers/orders_providers.dart';
 import 'package:delivery_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-/// Order tracking — mock timeline, map placeholder, RTL-safe; opened from My Orders or checkout success.
-class OrderTrackingPage extends StatelessWidget {
+/// Order tracking — timeline, map placeholder, RTL-safe; opened from My Orders or checkout success.
+class OrderTrackingPage extends ConsumerWidget {
   const OrderTrackingPage({
     required this.orderId,
     super.key,
@@ -31,11 +32,11 @@ class OrderTrackingPage extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final order = findMockCustomerOrder(orderId);
+    final orderAsync = ref.watch(customerOrderProvider(orderId));
     final bottom = MediaQuery.paddingOf(context).bottom;
 
     return Scaffold(
@@ -43,14 +44,19 @@ class OrderTrackingPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.orderTrackingTitle),
       ),
-      body: order == null
-          ? _UnknownOrderBody(
-              l10n: l10n,
-              scheme: scheme,
-              textTheme: textTheme,
-              bottom: bottom,
-            )
-          : LayoutBuilder(
+      body: orderAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => _OrderTrackingErrorBody(
+          message: error is UserMessageException
+              ? error.message
+              : error.toString(),
+          onRetry: () => ref.invalidate(customerOrderProvider(orderId)),
+          l10n: l10n,
+          scheme: scheme,
+          textTheme: textTheme,
+          bottom: bottom,
+        ),
+        data: (order) => LayoutBuilder(
               builder: (context, constraints) {
                 final width = constraints.maxWidth;
                 final inset = AppSpacing.pageHorizontalGutter(width);
@@ -161,31 +167,23 @@ class OrderTrackingPage extends StatelessWidget {
                 );
               },
             ),
+      ),
     );
   }
 }
 
-String _formatEta(BuildContext context, DateTime utc) {
-  final local = utc.toLocal();
-  final localeTag = Localizations.localeOf(context).toString();
-  final today = DateTime.now();
-  final sameCalendarDay = local.year == today.year &&
-      local.month == today.month &&
-      local.day == today.day;
-  if (sameCalendarDay) {
-    return DateFormat.jm(localeTag).format(local);
-  }
-  return DateFormat.yMMMd(localeTag).add_jm().format(local);
-}
-
-class _UnknownOrderBody extends StatelessWidget {
-  const _UnknownOrderBody({
+class _OrderTrackingErrorBody extends StatelessWidget {
+  const _OrderTrackingErrorBody({
+    required this.message,
+    required this.onRetry,
     required this.l10n,
     required this.scheme,
     required this.textTheme,
     required this.bottom,
   });
 
+  final String message;
+  final VoidCallback onRetry;
   final AppLocalizations l10n;
   final ColorScheme scheme;
   final TextTheme textTheme;
@@ -201,14 +199,37 @@ class _UnknownOrderBody extends StatelessWidget {
         AppSpacing.xxl + bottom,
       ),
       child: Center(
-        child: Text(
-          l10n.orderTrackingUnknownOrder,
-          textAlign: TextAlign.center,
-          style: textTheme.bodyLarge?.copyWith(color: scheme.onSurfaceVariant),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: textTheme.bodyLarge?.copyWith(color: scheme.onSurfaceVariant),
+            ),
+            SizedBox(height: AppSpacing.md),
+            FilledButton(
+              onPressed: onRetry,
+              child: Text(l10n.homeRetryRestaurants),
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+String _formatEta(BuildContext context, DateTime utc) {
+  final local = utc.toLocal();
+  final localeTag = Localizations.localeOf(context).toString();
+  final today = DateTime.now();
+  final sameCalendarDay = local.year == today.year &&
+      local.month == today.month &&
+      local.day == today.day;
+  if (sameCalendarDay) {
+    return DateFormat.jm(localeTag).format(local);
+  }
+  return DateFormat.yMMMd(localeTag).add_jm().format(local);
 }
 
 class _CancelledBanner extends StatelessWidget {

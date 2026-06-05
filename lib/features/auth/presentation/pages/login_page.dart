@@ -10,11 +10,10 @@ import 'package:delivery_app/features/auth/presentation/widgets/auth_password_fi
 import 'package:delivery_app/features/auth/presentation/widgets/auth_screen_shell.dart';
 import 'package:delivery_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// Customer login — phone + password via [LoginController]; navigation after
+/// Customer login — email + password via [LoginController]; navigation after
 /// success is handled by GoRouter redirects when the session becomes signed in.
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -25,12 +24,12 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _phoneController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -87,16 +86,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               SizedBox(height: gap),
               CustomTextField(
-                controller: _phoneController,
-                labelText: l10n.authPhoneLabel,
-                hintText: l10n.authPhoneHint,
-                keyboardType: TextInputType.phone,
+                controller: _emailController,
+                labelText: l10n.authEmailLabel,
+                hintText: l10n.authEmailHint,
+                keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
-                autofillHints: const [AutofillHints.telephoneNumberDevice],
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[\d+\s\-]')),
-                ],
-                validator: (v) => AuthValidators.phone(l10n, v),
+                autocorrect: false,
+                autofillHints: const [AutofillHints.email],
+                validator: (v) => AuthValidators.emailRequired(l10n, v),
               ),
               SizedBox(height: AppSpacing.lg),
               AuthPasswordField(
@@ -130,7 +127,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           return;
                         }
                         await ref.read(loginControllerProvider.notifier).submit(
-                              phone: _phoneController.text.trim(),
+                              email: _emailController.text.trim(),
                               password: _passwordController.text,
                             );
                       },

@@ -45,12 +45,16 @@ class CustomerOrder extends Equatable {
     required this.total,
     required this.placedAt,
     required this.estimatedArrivalAt,
+    this.restaurantId = '',
     this.driverName = '',
     this.driverRating,
   });
 
   final String id;
   final String orderNumber;
+
+  /// Branch id from API; used to resolve [restaurantName] when empty.
+  final String restaurantId;
   final String restaurantName;
   final OrderStatus status;
   final Money total;
@@ -69,6 +73,7 @@ class CustomerOrder extends Equatable {
   List<Object?> get props => [
         id,
         orderNumber,
+        restaurantId,
         restaurantName,
         status,
         total,

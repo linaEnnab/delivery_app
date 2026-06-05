@@ -8,8 +8,12 @@ abstract final class MockCheckoutData {
   static const GeoLocation defaultDeliveryPoint =
       GeoLocation(latitude: 31.5, longitude: 34.47);
 
+  /// Must be a valid GUID — [POST /api/Order] binds `deliveryAddressId` as `System.Guid`.
+  static const defaultDeliveryAddressId =
+      '44444444-4444-4444-4444-444444444444';
+
   static final DeliveryAddress deliveryAddress = DeliveryAddress(
-    id: 'mock-checkout-address',
+    id: defaultDeliveryAddressId,
     label: 'المنزل',
     line1: 'شارع السوق، بجانب صيدلية النور',
     line2: null,

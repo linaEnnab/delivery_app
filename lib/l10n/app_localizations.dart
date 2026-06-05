@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// No description provided for @authEmailLabel.
   ///
   /// In ar, this message translates to:
-  /// **'البريد الإلكتروني (اختياري)'**
+  /// **'البريد الإلكتروني'**
   String get authEmailLabel;
 
   /// No description provided for @authEmailHint.
@@ -301,6 +301,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'البريد الإلكتروني غير صالح'**
   String get authEmailInvalid;
+
+  /// No description provided for @authEmailRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى إدخال بريدك الإلكتروني'**
+  String get authEmailRequired;
 
   /// No description provided for @authLoginFailed.
   ///
@@ -727,6 +733,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم استلام طلبك (تجريبي)'**
   String get checkoutPlaceOrderDemo;
+
+  /// No description provided for @checkoutPlaceOrderFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر إتمام الطلب. حاول مرة أخرى.'**
+  String get checkoutPlaceOrderFailed;
 
   /// No description provided for @checkoutEmptyCartTitle.
   ///

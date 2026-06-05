@@ -1,9 +1,10 @@
 import 'package:delivery_app/core/theme/app_radius.dart';
 import 'package:delivery_app/core/theme/app_spacing.dart';
 import 'package:delivery_app/core/widgets/core_widgets.dart';
-import 'package:delivery_app/features/orders/data/mock_my_orders_data.dart';
+import 'package:delivery_app/core/errors/exceptions.dart';
 import 'package:delivery_app/features/orders/domain/customer_order.dart';
 import 'package:delivery_app/features/orders/presentation/providers/order_review_submission_provider.dart';
+import 'package:delivery_app/features/orders/presentation/providers/orders_providers.dart';
 import 'package:delivery_app/features/orders/presentation/widgets/order_review_star_bar.dart';
 import 'package:delivery_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -92,21 +93,51 @@ class _OrderReviewPageState extends ConsumerState<OrderReviewPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final order = findMockCustomerOrder(widget.orderId);
+    final orderAsync = ref.watch(customerOrderProvider(widget.orderId));
     final submitted = ref.watch(orderReviewSubmittedIdsProvider);
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final bottom = MediaQuery.paddingOf(context).bottom;
 
-    late final Widget body;
-    if (order == null) {
-      body = _ReviewBlockedBody(
-        message: l10n.orderReviewUnknownOrderBody,
+    return orderAsync.when(
+      loading: () => Scaffold(
+        appBar: AppBar(title: Text(l10n.orderReviewTitle)),
+        body: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, _) => Scaffold(
+        appBar: AppBar(title: Text(l10n.orderReviewTitle)),
+        body: _ReviewBlockedBody(
+          message: error is UserMessageException
+              ? error.message
+              : l10n.orderReviewUnknownOrderBody,
+          scheme: scheme,
+          textTheme: textTheme,
+          bottom: bottom,
+        ),
+      ),
+      data: (order) => _buildReviewScaffold(
+        context: context,
+        order: order,
+        submitted: submitted,
+        l10n: l10n,
         scheme: scheme,
         textTheme: textTheme,
         bottom: bottom,
-      );
-    } else if (submitted.contains(order.id)) {
+      ),
+    );
+  }
+
+  Widget _buildReviewScaffold({
+    required BuildContext context,
+    required CustomerOrder order,
+    required Set<String> submitted,
+    required AppLocalizations l10n,
+    required ColorScheme scheme,
+    required TextTheme textTheme,
+    required double bottom,
+  }) {
+    late final Widget body;
+    if (submitted.contains(order.id)) {
       body = _ReviewBlockedBody(
         message: l10n.orderReviewAlreadySubmittedBody,
         scheme: scheme,

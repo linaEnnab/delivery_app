@@ -10,7 +10,7 @@ Unless noted, JSON uses **camelCase** property names (ASP.NET Core default). Enu
 |--------|------|----------|
 | `GET` | `/api/restaurant` | `RestaurantListItemDto[]` |
 | `GET` | `/api/restaurant/{id}` | `RestaurantDetailDto` or `404` |
-| `GET` | `/api/restaurants/{restaurantId}/products` | `ProductDto[]` |
+| `GET` | `/api/restaurant/{restaurantId}/products` | `ProductDto[]` |
 | `GET` | `/api/categories/restaurant/{restaurantId}` | `CategoryDto[]` |
 | `GET` | `/api/Review/restaurant/{restaurantId}` | reviews payload from handler |
 | `GET` | `/api/Review/driver/{driverId}` | reviews payload from handler |
@@ -41,8 +41,8 @@ The Flutter client maps this to the in-app `Product` model and **sorts menu rows
 | Method | Path | Auth | Notes |
 |--------|------|------|--------|
 | `POST` | `/api/Order` | Customer | Body: `CreateOrderRequest`. Success: `201` with `{ "orderId": "<guid>" }`. |
-| `GET` | `/api/Order/{id}` | Order participant | |
-| `GET` | `/api/Order/customer` | Customer | Optional query: `status` (`OrderStatus`). |
+| `GET` | `/api/Order/{id}` | Order participant | Detail: `orderId`, numeric `status`, `placedAtUtc`, optional `deliveredAtUtc`, `restaurantId`, `driverId`, `pricing`, `lineItems[]`. |
+| `GET` | `/api/Order/customer` | Customer | Array of summary rows: `orderId`, numeric `status`, `placedAtUtc`, `restaurantId`, optional `driverId`, `totalAmount`. Optional query: `status` (`OrderStatus`). |
 | `PATCH` | `/api/Order/{id}/status` | Order status management | Body: `{ "newStatus": <OrderStatus> }`. |
 
 ### `CreateOrderRequest`
